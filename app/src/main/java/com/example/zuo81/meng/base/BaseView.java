@@ -5,4 +5,18 @@ package com.example.zuo81.meng.base;
  */
 
 public interface BaseView {
+
+    void showErrorMsg(String msg);
+
+    void showNightMode(boolean isNight);
+
+    //======   state   =========
+
+    void stateError();
+
+    void stateEmpty();
+
+    void stateLoading();
+
+    void stateMain();
 }

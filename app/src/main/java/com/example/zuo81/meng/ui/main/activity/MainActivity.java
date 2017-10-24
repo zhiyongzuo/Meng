@@ -1,4 +1,4 @@
-package com.example.zuo81.meng.ui;
+package com.example.zuo81.meng.ui.main.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
