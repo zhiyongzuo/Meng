@@ -11,21 +11,17 @@ import android.view.View;
 import com.example.zuo81.meng.R;
 import com.example.zuo81.meng.app.App;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportActivity;
 
 public abstract class SimpleActivity extends SupportActivity {
 
     protected Activity mActivity;
-    private Unbinder mUnBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
         mActivity = this;
-        mUnBinder = ButterKnife.bind(this);
         onViewCreated();
         App.getInstance().addActivity(this);
         initEventAndData();
@@ -37,7 +33,6 @@ public abstract class SimpleActivity extends SupportActivity {
     protected void onDestroy() {
         super.onDestroy();
         App.getInstance().removeActivity(this);
-        mUnBinder.unbind();
     }
 
     protected void setToolbar(Toolbar toolbar, String title) {

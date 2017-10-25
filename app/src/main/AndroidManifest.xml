@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.zuo81.meng">
 
+    <users-permission android:name="android.permission.Internet"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,10 +13,9 @@
         android:theme="@style/AppTheme">
         //main class
         <activity
-            android:name=".ui.main.activity.WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_welcome"
-            android:theme="@style/FullscreenTheme">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,21 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.main.activity.MainActivity"
             android:label="@string/app_name"
+            android:name=".ui.main.activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         //Dictionary
-        <activity
-            android:name=".base.BaseActivity"
-            android:label="@string/title_activity_base"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".base.SimpleActivity"
-            android:label="@string/title_activity_simple"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
     </application>
 
 </manifest>

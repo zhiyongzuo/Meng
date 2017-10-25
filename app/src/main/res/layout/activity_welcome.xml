@@ -3,10 +3,11 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:background="#fff"
-                  tools:context="com.example.zuo81.meng.ui.main.activity.WelcomeActivity">
+                  tools:context="com.example.zuo81.meng.ui.welcome.WelcomeActivity">
 
     <ImageView
         android:id="@+id/iv_welcome_bg"
+        android:background="@drawable/test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <TextView
