@@ -9,13 +9,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.zuo81.meng.R;
-import com.example.zuo81.meng.component.ImageLoader;
-import com.example.zuo81.meng.presenter.WelcomePresenter;
-import com.example.zuo81.meng.presenter.WelcomePresenterImp;
+import com.example.zuo81.meng.model.bean.WelcomeBean;
+import com.example.zuo81.meng.presenter.welcome.WelcomePresenter;
+import com.example.zuo81.meng.presenter.welcome.WelcomePresenterImp;
 import com.example.zuo81.meng.ui.main.activity.MainActivity;
-import com.example.zuo81.meng.ui.welcome.WelcomeView;
 import com.orhanobut.logger.AndroidLogAdapter;
-import com.orhanobut.logger.LogAdapter;
 import com.orhanobut.logger.Logger;
 
 
@@ -37,10 +35,10 @@ public class WelcomeActivity extends AppCompatActivity implements WelcomeView {
     }
 
     @Override
-    public void showPic(String url) {
-        Glide.with(this).load(url).into(ivWelcomeBg);
-        // ImageLoader.load(this, url, ivWelcomeBg);
-        jumpToMain();
+    public void showPic(WelcomeBean welcomeBean) {
+        String url = "http://www.bing.com/" + welcomeBean.getImages().get(0).getUrl();
+        Logger.d(url);
+        //Glide.with(this).load(url).into(ivWelcomeBg);
     }
 
     @Override

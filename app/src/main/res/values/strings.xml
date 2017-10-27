@@ -4,11 +4,18 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    //toolbar
     <string name="action_settings">Settings</string>
+    <string name="search">Search</string>
 
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_base">BaseActivity</string>
     <string name="title_activity_simple">SimpleActivity</string>
+
+    <string name="click_second_time_for_exit">再按一次退出</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

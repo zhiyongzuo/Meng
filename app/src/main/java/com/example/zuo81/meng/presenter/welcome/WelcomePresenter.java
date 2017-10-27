@@ -1,4 +1,4 @@
-package com.example.zuo81.meng.presenter;
+package com.example.zuo81.meng.presenter.welcome;
 
 import com.example.zuo81.meng.ui.welcome.WelcomeView;
 
