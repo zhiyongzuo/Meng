@@ -2,11 +2,13 @@ package com.example.zuo81.meng.model.bean;
 
 import java.util.List;
 
+import io.realm.RealmObject;
+
 /**
  * Created by zuo81 on 2017/10/26.
  */
 
-public class DictionaryBean {
+public class DictionaryBean extends RealmObject {
 
     /**
      * msg : SUCCESS

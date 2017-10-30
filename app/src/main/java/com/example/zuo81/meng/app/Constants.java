@@ -5,4 +5,6 @@ package com.example.zuo81.meng.app;
  */
 
 public class Constants {
+
+    public static final int TYPE_DICTIONARY = 106;
 }

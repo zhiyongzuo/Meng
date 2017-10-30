@@ -1,6 +1,7 @@
 package com.example.zuo81.meng.presenter.dictionary;
 
 import com.example.zuo81.meng.model.bean.DictionaryBean;
+import com.example.zuo81.meng.ui.dictionary.view.DictionaryView;
 
 import java.util.List;
 
@@ -10,7 +11,11 @@ import java.util.List;
 
 public interface DictionaryPresenter {
 
+    void attachView(DictionaryView view);
+
+    void dettachView();
+
     void getDictionary();
 
-    List<DictionaryBean> getList();
+    List<DictionaryBean> getList(String name);
 }

@@ -55,7 +55,6 @@ public class WelcomePresenterImp implements WelcomePresenter, WelcomeModel.OnSho
                 .doOnNext(new Consumer<WelcomeBean>() {
                     @Override
                     public void accept(WelcomeBean welcomeBean) throws Exception {
-                        Logger.d("1");
                         mWelcomeView.showPic(welcomeBean);
                     }
                 })
@@ -63,7 +62,6 @@ public class WelcomePresenterImp implements WelcomePresenter, WelcomeModel.OnSho
                 .subscribe(new Consumer<WelcomeBean>() {
                     @Override
                     public void accept(WelcomeBean welcomeBean) throws Exception {
-                        Logger.d("2");
                         mWelcomeView.jumpToMain();
                     }
                 });

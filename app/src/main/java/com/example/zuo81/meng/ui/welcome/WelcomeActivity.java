@@ -37,7 +37,6 @@ public class WelcomeActivity extends AppCompatActivity implements WelcomeView {
     @Override
     public void showPic(WelcomeBean welcomeBean) {
         String url = "http://www.bing.com/" + welcomeBean.getImages().get(0).getUrl();
-        Logger.d(url);
         //Glide.with(this).load(url).into(ivWelcomeBg);
     }
 

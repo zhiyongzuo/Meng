@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
 import com.example.zuo81.meng.model.bean.DictionaryBean;
+import com.example.zuo81.meng.utils.LetterTileProvider;
 
 import java.util.List;
 
@@ -21,10 +22,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder> {
     private List<DictionaryBean> list;
     private Context context;
+    private LetterTileProvider mLetterTileProvider;
 
     public DictionaryAdapter(Context context, List<DictionaryBean> list) {
         this.list = list;
         this.context = context;
+        mLetterTileProvider = new LetterTileProvider(context);
     }
 
     @Override
@@ -35,9 +38,15 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Di
     }
 
     @Override
-    public void onBindViewHolder(DictionaryViewHolder holder, int position) {
-        //holder.mCircleImageView;
+    public void onBindViewHolder(final DictionaryViewHolder holder, final int position) {
+        holder.mCircleImageView.setImageBitmap(mLetterTileProvider.getLetterTile(list.get(position).getData().getDefinition()));
         holder.mTextView.setText(list.get(position).getData().getDefinition());
+        holder.mCircleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                holder.mTextView.setText(list.get(position).getData().getContent());
+            }
+        });
     }
 
     @Override

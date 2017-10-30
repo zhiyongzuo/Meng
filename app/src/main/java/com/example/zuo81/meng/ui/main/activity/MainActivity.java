@@ -21,8 +21,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.app.Constants;
+import com.example.zuo81.meng.component.RXBus;
+import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.ui.dictionary.DictionaryFragment;
 import com.example.zuo81.meng.ui.main.view.MainView;
+import com.orhanobut.logger.Logger;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
@@ -32,6 +36,7 @@ public class MainActivity extends SupportActivity
     private long firstTime = 0;
     private DictionaryFragment mDictionaryFragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +45,8 @@ public class MainActivity extends SupportActivity
         setSupportActionBar(toolbar);
 
         mDictionaryFragment = new DictionaryFragment();
-        showHideFragment(mDictionaryFragment);
+        //showHideFragment(mDictionaryFragment);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, mDictionaryFragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -51,7 +57,7 @@ public class MainActivity extends SupportActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getActionBar().setTitle(navigationView.getMenu().findItem(R.id.nav_dictionary).getTitle().toString());
+        toolbar.setTitle(navigationView.getMenu().findItem(R.id.nav_dictionary).getTitle().toString());
 
     }
 
@@ -75,23 +81,22 @@ public class MainActivity extends SupportActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView)item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Logger.d("MainActivity  " + query);
+                RXBus.getInstance().post(new SearchEvent(query, Constants.TYPE_DICTIONARY));
+                return false;
+            }
+        });
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            SearchView searchView = (SearchView)MenuItemCompat.getActionView(item);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
