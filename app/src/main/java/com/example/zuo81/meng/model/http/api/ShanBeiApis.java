@@ -1,8 +1,8 @@
 package com.example.zuo81.meng.model.http.api;
 
-import com.example.zuo81.meng.model.bean.DictionaryBean;
+import com.example.zuo81.meng.model.bean.ShanBeiBean;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -15,5 +15,5 @@ public interface ShanBeiApis {
     String Host = "https://api.shanbay.com/bdc/";
 
     @GET("search/")
-    Observable<DictionaryBean> getDictionaryInfo(@Query("word") String word);
+    Flowable<ShanBeiBean> getDictionaryInfo(@Query("word") String word);
 }

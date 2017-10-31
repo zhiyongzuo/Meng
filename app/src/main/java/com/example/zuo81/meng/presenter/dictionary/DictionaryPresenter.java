@@ -1,6 +1,7 @@
 package com.example.zuo81.meng.presenter.dictionary;
 
-import com.example.zuo81.meng.model.bean.DictionaryBean;
+import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
+import com.example.zuo81.meng.model.bean.ShanBeiBean;
 import com.example.zuo81.meng.ui.dictionary.view.DictionaryView;
 
 import java.util.List;
@@ -15,7 +16,10 @@ public interface DictionaryPresenter {
 
     void dettachView();
 
-    void getDictionary();
+    List<RealmDictionaryBean> getAllRealmDictionary();
 
-    List<DictionaryBean> getList(String name);
+    RealmDictionaryBean getFirstRealmDictionary();
+
+    void addToRealmDictionary(String english, String chinese);
+
 }

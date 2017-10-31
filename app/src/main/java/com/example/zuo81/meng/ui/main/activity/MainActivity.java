@@ -69,7 +69,8 @@ public class MainActivity extends SupportActivity
         } else {
             long secondTime = System.currentTimeMillis();
             if(secondTime - firstTime < 2000) {
-                super.onBackPressed();
+                //super.onBackPressed();
+                System.exit(0);
             } else {
                 Toast.makeText(this, R.string.click_second_time_for_exit, Toast.LENGTH_SHORT).show();
                 firstTime = secondTime;
@@ -91,7 +92,6 @@ public class MainActivity extends SupportActivity
 
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Logger.d("MainActivity  " + query);
                 RXBus.getInstance().post(new SearchEvent(query, Constants.TYPE_DICTIONARY));
                 return false;
             }

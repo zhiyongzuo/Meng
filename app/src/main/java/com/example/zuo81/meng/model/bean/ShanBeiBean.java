@@ -8,7 +8,7 @@ import io.realm.RealmObject;
  * Created by zuo81 on 2017/10/26.
  */
 
-public class DictionaryBean extends RealmObject {
+public class ShanBeiBean {
 
     /**
      * msg : SUCCESS
