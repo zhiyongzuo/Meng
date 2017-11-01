@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
 import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
-import com.example.zuo81.meng.model.bean.ShanBeiBean;
+import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.utils.LetterTileProvider;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by zuo81 on 2017/10/27.
  */
 
-public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder> {
+public class DictionaryAdapter<T> extends RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder> {
     private List<RealmDictionaryBean> list;
     private Context context;
     private LetterTileProvider mLetterTileProvider;
@@ -34,7 +34,7 @@ public class DictionaryAdapter extends RecyclerView.Adapter<DictionaryAdapter.Di
 
     @Override
     public DictionaryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.dictionary_item, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.dictionary_item, parent, false);
         DictionaryViewHolder holder = new DictionaryViewHolder(view);
         return holder;
     }

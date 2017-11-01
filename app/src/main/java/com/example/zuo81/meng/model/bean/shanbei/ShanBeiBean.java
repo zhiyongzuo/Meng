@@ -1,4 +1,4 @@
-package com.example.zuo81.meng.model.bean;
+package com.example.zuo81.meng.model.bean.shanbei;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import io.realm.RealmObject;
  */
 
 public class ShanBeiBean {
+
 
     /**
      * msg : SUCCESS

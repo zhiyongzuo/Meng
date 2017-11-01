@@ -5,7 +5,7 @@ import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.ApiClient;
 import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
-import com.example.zuo81.meng.model.bean.ShanBeiBean;
+import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.model.db.RealmHelper;
 import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.model.http.api.ShanBeiApis;
@@ -23,7 +23,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.subscribers.ResourceSubscriber;
-import io.realm.Realm;
 
 import static com.example.zuo81.meng.model.http.api.ShanBeiApis.Host;
 
@@ -90,11 +89,6 @@ public class DictionaryPresenterImpl extends DictionaryFragment implements Dicti
     }
 
     @Override
-    public RealmDictionaryBean getFirstRealmDictionary() {
-        return mRealmHelper.getFirstRealmDictionary();
-    }
-
-    @Override
     public void addToRealmDictionary(String english, String chinese) {
         Logger.d("addToRealmDictionary");
         RealmDictionaryBean bean = new RealmDictionaryBean();
@@ -103,6 +97,10 @@ public class DictionaryPresenterImpl extends DictionaryFragment implements Dicti
         bean.setEnglish(english);
         bean.setChinese(chinese);
         mRealmHelper.insertDictionaryBean(bean);
+    }
+
+    public void deleteDictionaryData(long id) {
+        mRealmHelper.deleteDictionaryBean(id);
     }
 
     @Override

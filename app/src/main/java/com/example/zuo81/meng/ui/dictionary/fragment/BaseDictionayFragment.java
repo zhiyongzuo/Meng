@@ -26,7 +26,6 @@ public abstract class BaseDictionayFragment extends BaseFragment implements Dict
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Realm.init(getContext());
         if (mPresenter == null) {
             mPresenter = new DictionaryPresenterImpl();
         }

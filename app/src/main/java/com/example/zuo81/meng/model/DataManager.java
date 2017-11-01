@@ -1,6 +1,6 @@
 package com.example.zuo81.meng.model;
 
-import com.example.zuo81.meng.model.bean.ShanBeiBean;
+import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.model.http.HttpHelper;
 
 import io.reactivex.Flowable;

@@ -5,17 +5,17 @@
               android:paddingTop="15dp"
               android:paddingLeft="15dp"
               android:layout_width="match_parent"
-              android:layout_height="50dp">
+              android:layout_height="60dp">
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_item_dictionary"
         tools:src="@drawable/test"
         android:layout_width="50dp"
-        android:layout_height="50dp" />
+        android:layout_height="match_parent" />
     <TextView
         android:id="@+id/tv_item_dictionary"
         android:gravity="center"
         tools:text="356466"
         android:layout_width="match_parent"
-        android:layout_height="50dp"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

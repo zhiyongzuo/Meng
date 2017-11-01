@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,9 @@ import android.widget.Toast;
 
 import com.example.zuo81.meng.R;
 import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
-import com.example.zuo81.meng.model.bean.ShanBeiBean;
+import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.ui.dictionary.fragment.BaseDictionayFragment;
+import com.example.zuo81.meng.widget.DefaultItemTouchHelpCallback;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -30,6 +32,8 @@ public class DictionaryFragment extends BaseDictionayFragment {
     private TextView tvDictionary;
     private DictionaryAdapter mDictionaryAdapter;
     private List<RealmDictionaryBean> mList = new ArrayList<>();
+    private DefaultItemTouchHelpCallback mCallback;
+
 
     public DictionaryFragment() {
         // Required empty public constructor
@@ -53,6 +57,26 @@ public class DictionaryFragment extends BaseDictionayFragment {
             tvDictionary.setVisibility(View.VISIBLE);
             tvDictionary.setText("kong");
         }
+
+        mCallback = new DefaultItemTouchHelpCallback(new DefaultItemTouchHelpCallback.OnItemTouchCallbackListener() {
+            @Override
+            public void onSwiped(int adapterPosition) {
+                if(mList!=null) {
+                    mPresenter.deleteDictionaryData(mList.get(adapterPosition).getId());
+                    mList.remove(adapterPosition);
+                    mDictionaryAdapter.notifyItemRemoved(adapterPosition);
+                }
+            }
+
+            @Override
+            public boolean onMove(int srcPosition, int targetPosition) {
+                return false;
+            }
+        });
+        mCallback.setDragEnable(true);
+        mCallback.setSwipeEnable(true);
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mCallback);
+        mItemTouchHelper.attachToRecyclerView(rvDictionary);
         return view;
     }
 
@@ -70,7 +94,11 @@ public class DictionaryFragment extends BaseDictionayFragment {
     public void updateList(ShanBeiBean bean) {
         if (bean.getData().getDefinition() != null) {
             mPresenter.addToRealmDictionary(bean.getData().getContent(), bean.getData().getDefinition());
-            mList.add(mPresenter.getFirstRealmDictionary());
+
+            mList = mPresenter.getAllRealmDictionary();
+            mDictionaryAdapter = new DictionaryAdapter(getContext(), mList);
+            rvDictionary.setAdapter(mDictionaryAdapter);
+
             if(RV_INITED) {
                 mDictionaryAdapter.notifyDataSetChanged();
             } else{

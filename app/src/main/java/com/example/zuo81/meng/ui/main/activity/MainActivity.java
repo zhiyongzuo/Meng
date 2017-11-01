@@ -1,5 +1,6 @@
 package com.example.zuo81.meng.ui.main.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -21,18 +22,23 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.app.App;
 import com.example.zuo81.meng.app.Constants;
 import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.ui.dictionary.DictionaryFragment;
 import com.example.zuo81.meng.ui.main.view.MainView;
+import com.example.zuo81.meng.ui.music.MusicFragment;
+import com.example.zuo81.meng.widget.DefaultItemTouchHelpCallback;
 import com.orhanobut.logger.Logger;
 
 import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.SupportFragment;
 
 public class MainActivity extends SupportActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView {
 
+    private Toolbar toolbar;
     private long firstTime = 0;
     private DictionaryFragment mDictionaryFragment;
 
@@ -41,12 +47,13 @@ public class MainActivity extends SupportActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mDictionaryFragment = new DictionaryFragment();
-        //showHideFragment(mDictionaryFragment);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_main_content, mDictionaryFragment).commit();
+        if(findFragment(DictionaryFragment.class) == null) {
+            loadRootFragment(R.id.fl_main_content, mDictionaryFragment);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -56,6 +63,7 @@ public class MainActivity extends SupportActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().findItem(R.id.nav_dictionary).setChecked(true);
 
         toolbar.setTitle(navigationView.getMenu().findItem(R.id.nav_dictionary).getTitle().toString());
 
@@ -69,8 +77,7 @@ public class MainActivity extends SupportActivity
         } else {
             long secondTime = System.currentTimeMillis();
             if(secondTime - firstTime < 2000) {
-                //super.onBackPressed();
-                System.exit(0);
+                finish();
             } else {
                 Toast.makeText(this, R.string.click_second_time_for_exit, Toast.LENGTH_SHORT).show();
                 firstTime = secondTime;
@@ -104,8 +111,19 @@ public class MainActivity extends SupportActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
+        if(id == R.id.nav_dictionary) {
+            start(mDictionaryFragment, SupportFragment.SINGLETASK);
+        }else if(id == R.id.nav_music) {
+            MusicFragment mMusicFragment = findFragment(MusicFragment.class);
+            if(mMusicFragment == null) {
+                popTo(DictionaryFragment.class, false, new Runnable() {
+                    @Override
+                    public void run() {
+                        start(MusicFragment.newInstance());
+                    }
+                });
+            }
+        }else if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -118,7 +136,7 @@ public class MainActivity extends SupportActivity
         } else if (id == R.id.nav_send) {
 
         }
-
+        toolbar.setTitle(item.getTitle());
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

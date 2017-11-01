@@ -33,8 +33,13 @@ public class RealmHelper implements DBHelper {
     }
 
     //删除字典词汇
-    public void deleteDictionaryBean(String id) {
-
+    public void deleteDictionaryBean(long id) {
+        RealmDictionaryBean bean = mRealm.where(RealmDictionaryBean.class).equalTo("id", id).findFirst();
+        mRealm.beginTransaction();
+        if(bean != null) {
+            bean.deleteFromRealm();
+        }
+        mRealm.commitTransaction();
     }
 
     public List<RealmDictionaryBean> getAllRealmDictionaryList() {
