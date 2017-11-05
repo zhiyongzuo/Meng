@@ -34,9 +34,8 @@ public class DictionaryFragment extends BaseDictionayFragment {
     private List<RealmDictionaryBean> mList = new ArrayList<>();
     private DefaultItemTouchHelpCallback mCallback;
 
-
-    public DictionaryFragment() {
-        // Required empty public constructor
+    public static DictionaryFragment newInstance() {
+        return new DictionaryFragment();
     }
 
 
@@ -93,6 +92,9 @@ public class DictionaryFragment extends BaseDictionayFragment {
     @Override
     public void updateList(ShanBeiBean bean) {
         if (bean.getData().getDefinition() != null) {
+
+            Toast.makeText(getContext(), bean.getData().getDefinition(), Toast.LENGTH_SHORT).show();
+
             mPresenter.addToRealmDictionary(bean.getData().getContent(), bean.getData().getDefinition());
 
             mList = mPresenter.getAllRealmDictionary();

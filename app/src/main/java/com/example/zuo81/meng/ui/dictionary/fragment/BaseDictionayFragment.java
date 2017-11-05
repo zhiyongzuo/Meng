@@ -36,7 +36,7 @@ public abstract class BaseDictionayFragment extends BaseFragment implements Dict
     @Override
     public void onDestroyView() {
         if(mPresenter != null) {
-            mPresenter.dettachView();
+            mPresenter.detachView();
         }
         super.onDestroyView();
     }

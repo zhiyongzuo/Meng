@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        //main class
+        //welcome class
         <activity
             android:name=".ui.welcome.WelcomeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -23,12 +23,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        //MainActivity
         <activity
-            android:label="@string/app_name"
             android:name=".ui.main.activity.MainActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        //Dictionary
+        //share
+        <activity android:name=".ui.share.SharePicActivity">
+            <intent-filter android:label="@string/share">
+                <action android:name="android.intent.action.SEND"/>
+                <data android:mimeType="image/*"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

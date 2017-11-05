@@ -14,8 +14,6 @@ public interface DictionaryPresenter {
 
     void attachView(DictionaryView view);
 
-    void dettachView();
-
     List<RealmDictionaryBean> getAllRealmDictionary();
 
     void addToRealmDictionary(String english, String chinese);

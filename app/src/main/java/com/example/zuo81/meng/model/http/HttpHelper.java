@@ -10,5 +10,5 @@ import io.reactivex.Flowable;
 
 public interface HttpHelper {
 
-    Flowable<ShanBeiBean> fetchSearchListInfo(String s);
+    Flowable<ShanBeiBean> fetchShanBeiSearchInfo(String s);
 }

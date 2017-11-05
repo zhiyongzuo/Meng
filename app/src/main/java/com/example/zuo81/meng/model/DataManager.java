@@ -17,7 +17,7 @@ public class DataManager implements HttpHelper {
     }
 
     @Override
-    public Flowable<ShanBeiBean> fetchSearchListInfo(String s) {
-        return httpHeper.fetchSearchListInfo(s);
+    public Flowable<ShanBeiBean> fetchShanBeiSearchInfo(String s) {
+        return httpHeper.fetchShanBeiSearchInfo(s);
     }
 }

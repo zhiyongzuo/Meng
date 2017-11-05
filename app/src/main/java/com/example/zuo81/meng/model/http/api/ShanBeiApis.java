@@ -12,6 +12,7 @@ import retrofit2.http.Query;
 
 public interface ShanBeiApis {
 
+    //https://api.shanbay.com/bdc/search/?word={word}
     String Host = "https://api.shanbay.com/bdc/";
 
     @GET("search/")

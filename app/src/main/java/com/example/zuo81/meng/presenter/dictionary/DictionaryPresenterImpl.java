@@ -1,6 +1,7 @@
 package com.example.zuo81.meng.presenter.dictionary;
 
 import com.example.zuo81.meng.app.Constants;
+import com.example.zuo81.meng.base.presenter.RxPresenter;
 import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.ApiClient;
 import com.example.zuo81.meng.model.DataManager;
@@ -30,26 +31,22 @@ import static com.example.zuo81.meng.model.http.api.ShanBeiApis.Host;
  * Created by zuo81 on 2017/10/26.
  */
 
-public class DictionaryPresenterImpl extends DictionaryFragment implements DictionaryPresenter {
+public class DictionaryPresenterImpl extends RxPresenter<DictionaryView> implements DictionaryPresenter {
 
-    protected CompositeDisposable mCompositeDisposable;
-    private DictionaryView view;
-    private DataManager mDataManager;
     private ShanBeiApis mShanBeiApis;
     private RealmHelper mRealmHelper;
 
     @Override
     public void attachView(DictionaryView view) {
-        this.view = view;
+        super.attachView(view);
         //mDataManager = new DataManager(this);
         mShanBeiApis = ApiClient.retrofit(Host).create(ShanBeiApis.class);
-        //Realm.init(getContext());
         mRealmHelper = new RealmHelper();
         registerEvent();
     }
 
     public void registerEvent() {
-        addSubscribe(RXBus.getInstance().toFlowable(SearchEvent.class)
+        addToCompositeDisposable(RXBus.getInstance().toFlowable(SearchEvent.class)
                 .compose(RxUtil.<SearchEvent>rxSchedulerHelper())
                 .filter(new Predicate<SearchEvent>() {
                     @Override
@@ -104,18 +101,15 @@ public class DictionaryPresenterImpl extends DictionaryFragment implements Dicti
     }
 
     @Override
-    public void dettachView() {
-        this.view = null;
+    public void detachView() {
+        super.detachView();
         mRealmHelper.close();
-        if(mCompositeDisposable!=null) {
-            mCompositeDisposable.clear();
-        }
     }
 
     private void getSearchDictionaryData(String s) {
         Logger.d(s);
         Flowable<ShanBeiBean> observable = mShanBeiApis.getDictionaryInfo(s);
-        addSubscribe(observable
+        addToCompositeDisposable(observable
                 .compose(RxUtil.<ShanBeiBean>rxSchedulerHelper())
                 .subscribeWith(new ResourceSubscriber<ShanBeiBean>() {
 
@@ -135,12 +129,5 @@ public class DictionaryPresenterImpl extends DictionaryFragment implements Dicti
                         view.updateList(shanBeiBean);
                     }
                 }));
-    }
-
-    protected void addSubscribe(Disposable subscription) {
-        if (mCompositeDisposable == null) {
-            mCompositeDisposable = new CompositeDisposable();
-        }
-        mCompositeDisposable.add(subscription);
     }
 }
