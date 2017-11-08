@@ -1,4 +1,4 @@
-package com.example.zuo81.meng.model.bean;
+package com.example.zuo81.meng.model.bean.realm;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;

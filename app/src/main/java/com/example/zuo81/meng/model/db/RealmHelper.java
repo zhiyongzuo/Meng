@@ -1,6 +1,7 @@
 package com.example.zuo81.meng.model.db;
 
-import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
+import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
+import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
 
 import java.util.List;
 
@@ -14,15 +15,10 @@ import io.realm.RealmResults;
 
 public class RealmHelper implements DBHelper {
 
-    private static final String DB_NAME = "myRealm.realm";
     private Realm mRealm;
 
     public RealmHelper() {
-        mRealm = Realm.getInstance(new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .name(DB_NAME)
-                .schemaVersion(0)
-                .build());
+        mRealm = Realm.getDefaultInstance();
     }
 
     //增加字典词汇
@@ -51,8 +47,30 @@ public class RealmHelper implements DBHelper {
         RealmDictionaryBean results = mRealm.where(RealmDictionaryBean.class).findFirst();
         return mRealm.copyFromRealm(results);
     }
+    //      Photo
+    public void insertPhotoBean(RealmPhotoBean bean) {
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(bean);
+        mRealm.commitTransaction();
+    }
+
+    public void deletePhotoBean(long id) {
+        RealmPhotoBean bean = mRealm.where(RealmPhotoBean.class).equalTo("id", id).findFirst();
+        mRealm.beginTransaction();
+        if(bean!=null) {
+            bean.deleteFromRealm();
+        }
+        mRealm.commitTransaction();
+    }
+
+    public List<RealmPhotoBean> getAllRealmPhotoList() {
+        RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
+        return mRealm.copyFromRealm(results);
+    }
 
     public void close() {
-        mRealm.close();
+        if (!mRealm.isClosed()) {
+            mRealm.close();
+        }
     }
 }

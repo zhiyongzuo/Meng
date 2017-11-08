@@ -1,7 +1,6 @@
 package com.example.zuo81.meng.presenter.dictionary;
 
-import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
-import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
+import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.ui.dictionary.view.DictionaryView;
 
 import java.util.List;

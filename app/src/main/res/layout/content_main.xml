@@ -13,10 +13,5 @@
         android:id="@+id/fl_main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="57dp"
-        android:layout_gravity="bottom"
-        layout="@layout/include_play_bar"/>
 
 </FrameLayout>

@@ -26,7 +26,7 @@ public abstract class RxPresenter<T> {
         mCompositeDisposable.add(disposable);
     }
 
-    protected void detachView() {
+    public void detachView() {
         view = null;
         if(mCompositeDisposable != null) {
             mCompositeDisposable.clear();

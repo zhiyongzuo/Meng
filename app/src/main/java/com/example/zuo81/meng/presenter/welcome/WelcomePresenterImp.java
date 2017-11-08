@@ -35,6 +35,7 @@ public class WelcomePresenterImp implements WelcomePresenter, WelcomeModel.OnSho
     public WelcomePresenterImp(WelcomeView welcomeView) {
         this.mWelcomeView = welcomeView;
         mWelcomeModel = new WelcomeModelImpl();
+
     }
 
     @Override

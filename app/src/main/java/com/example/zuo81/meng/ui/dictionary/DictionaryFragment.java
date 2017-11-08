@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.zuo81.meng.R;
-import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
+import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.ui.dictionary.fragment.BaseDictionayFragment;
 import com.example.zuo81.meng.widget.DefaultItemTouchHelpCallback;

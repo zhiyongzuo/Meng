@@ -1,19 +1,21 @@
 package com.example.zuo81.meng.base;
 
+import android.os.Bundle;
+
+import com.example.zuo81.meng.base.presenter.RxPresenter;
 import com.example.zuo81.meng.ui.welcome.WelcomeView;
 
-public abstract class BaseActivity<T extends BasePresenter> extends SimpleActivity implements WelcomeView {
+import me.yokeyword.fragmentation.SupportActivity;
 
-    protected T mPresenter;
+public abstract class BaseActivity<T extends RxPresenter> extends SupportActivity {
+
+    protected T presenter;
 
     @Override
-    protected void onViewCreated() {
-        super.onViewCreated();
-        initInject();
-        if(mPresenter != null) {
-            mPresenter.attachView(this);
+    protected void onDestroy() {
+        super.onDestroy();
+        if (presenter!=null) {
+            presenter.detachView();
         }
     }
-
-    protected void initInject(){}
 }

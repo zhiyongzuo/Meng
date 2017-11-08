@@ -8,8 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
-import com.example.zuo81.meng.model.bean.RealmDictionaryBean;
-import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
+import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.utils.LetterTileProvider;
 
 import java.util.List;
