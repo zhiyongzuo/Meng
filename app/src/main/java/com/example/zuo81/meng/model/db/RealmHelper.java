@@ -3,6 +3,7 @@ package com.example.zuo81.meng.model.db;
 import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -66,6 +67,18 @@ public class RealmHelper implements DBHelper {
     public List<RealmPhotoBean> getAllRealmPhotoList() {
         RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
         return mRealm.copyFromRealm(results);
+    }
+
+    public List<RealmPhotoBean> getTenRealmPhotoList(int pageNumber) {
+        //assert pageNumber<0;
+        RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
+        List<RealmPhotoBean> clipResults = new ArrayList<>();
+        int startNumber = results.size() - (pageNumber - 1) * 10;
+        for(int n=startNumber; n>startNumber-10 & n>0; n--) {
+            //如果个数是11，则results.get(10)
+            clipResults.add(results.get(n-1));
+        }
+        return mRealm.copyFromRealm(clipResults);
     }
 
     public void close() {

@@ -1,8 +1,5 @@
 package com.example.zuo81.meng.ui.main.activity;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.widget.SearchView;
@@ -21,9 +18,9 @@ import com.example.zuo81.meng.app.Constants;
 import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.ui.dictionary.DictionaryFragment;
+import com.example.zuo81.meng.ui.gallery.GalleryFragment;
 import com.example.zuo81.meng.ui.main.view.MainView;
 import com.example.zuo81.meng.ui.music.MusicMainFragment;
-import com.example.zuo81.meng.utils.Auth;
 import com.orhanobut.logger.Logger;
 import com.qiniu.android.common.AutoZone;
 import com.qiniu.android.http.ResponseInfo;
@@ -58,6 +55,8 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 import static com.example.zuo81.meng.app.Constants.BUCKET_NAME;
 import static com.example.zuo81.meng.app.Constants.TEST_DOMAIN;
+import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
+import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
 
 public class MainActivity extends SupportActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainView{
@@ -68,7 +67,6 @@ public class MainActivity extends SupportActivity
     //qiniu
     String key = "default.realm";
     String dbPath = Realm.getDefaultInstance().getPath();
-    private UploadManager uploadManager;
     //
     public InputStream is;
 
@@ -177,8 +175,21 @@ public class MainActivity extends SupportActivity
                 start(mMusicFragment, SupportFragment.SINGLETASK);
             }
         }else if (id == R.id.nav_camera) {
-
+//
         } else if (id == R.id.nav_gallery) {
+            Toast.makeText(this, "nav_gallery", Toast.LENGTH_SHORT).show();
+            GalleryFragment mGalleryFragment = findFragment(GalleryFragment.class);
+            if(mGalleryFragment == null) {
+                //如果targetFragmentClass不是DictionaryClass,则不会跳转fragment
+                popTo(DictionaryFragment.class, false, new Runnable() {
+                    @Override
+                    public void run() {
+                        start(GalleryFragment.newInstance());
+                    }
+                });
+            } else {
+                start(mGalleryFragment, SupportFragment.SINGLETASK);
+            }
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -196,7 +207,6 @@ public class MainActivity extends SupportActivity
             }
             Realm realm = Realm.getDefaultInstance();
             realm.writeCopyTo(backUpFile);
-            backupInit();
 
             UploadOptions upOptions = new UploadOptions(null, null, false, new UpProgressHandler() {
                 @Override
@@ -210,7 +220,7 @@ public class MainActivity extends SupportActivity
                 }
             });
 
-            uploadManager.put(backUpFile, key, getUpToken(), new UpCompletionHandler() {
+            getUploadManagerInstance().put(backUpFile, key, getUpToken(key), new UpCompletionHandler() {
                 @Override
                 public void complete(String s, ResponseInfo responseInfo, JSONObject jsonObject) {
                     if(responseInfo.isOK()) {
@@ -284,54 +294,5 @@ public class MainActivity extends SupportActivity
                 Toast.makeText(MainActivity.this, "restore success", Toast.LENGTH_SHORT).show();
         }
         return true;
-    }
-
-    private void backupInit() {
-        Configuration config = new Configuration.Builder()
-                .chunkSize(512 * 1024)        // 分片上传时，每片的大小。 默认256K
-                .putThreshhold(1024 * 1024)   // 启用分片上传阀值。默认512K
-                .connectTimeout(10)           // 链接超时。默认10秒
-                .useHttps(true)               // 是否使用https上传域名
-                .responseTimeout(60)          // 服务器响应超时。默认60秒
-                .recorder(null)           // recorder分片上传时，已上传片记录器。默认null
-                .recorder(null, null)   // keyGen 分片上传时，生成标识符，用于片记录器区分是那个文件的上传记录
-                .zone(AutoZone.autoZone)        // 设置区域，指定不同区域的上传域名、备用域名、备用IP。
-                .build();
-// 重用uploadManager。一般地，只需要创建一个uploadManager对象
-        uploadManager = new UploadManager(config);
-    }
-
-    //获取token(开发中放到业务服务器)
-    public String getUpToken() {
-        return Auth.create(Constants.ak, Constants.sk).uploadToken(BUCKET_NAME, key);
-    }
-
-    public byte[] getByte(final String url) {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL fileUrl = new URL(url);
-                    HttpURLConnection conn = (HttpURLConnection) fileUrl
-                            .openConnection();
-                    conn.setDoInput(true);
-                    conn.connect();
-                    InputStream is = conn.getInputStream();
-                    Bitmap bm = BitmapFactory.decodeStream(is);
-                    bm.compress(Bitmap.CompressFormat.JPEG, 80, baos);
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return baos.toByteArray();
     }
 }

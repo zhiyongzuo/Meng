@@ -32,8 +32,10 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         //share
-        <activity android:name=".ui.share.SharePicActivity">
-            <intent-filter android:label="@string/share">
+        <activity
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:name=".ui.share.SharePicActivity">
+            <intent-filter android:label="@string/upload">
                 <action android:name="android.intent.action.SEND"/>
                 <data android:mimeType="image/*"/>
                 <data android:mimeType="text/plain"/>

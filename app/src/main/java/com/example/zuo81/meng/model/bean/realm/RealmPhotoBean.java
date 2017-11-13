@@ -9,6 +9,14 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmPhotoBean extends RealmObject {
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @PrimaryKey
     private long id;
     private String photoUrl;

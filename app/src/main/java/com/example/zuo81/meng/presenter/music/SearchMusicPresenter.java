@@ -29,7 +29,7 @@ public class SearchMusicPresenter extends RxPresenter<MusicView> {
     RetrofitHelper helper;
 
     @Override
-    protected void attachView(MusicView view) {
+    public void attachView(MusicView view) {
         super.attachView(view);
         helper = ApiClient.retrofit(BaiDuApis.Host).create(RetrofitHelper.class);
         registerEvent();

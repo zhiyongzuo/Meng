@@ -15,7 +15,7 @@ public abstract class RxPresenter<T> {
     protected T view;
     protected CompositeDisposable mCompositeDisposable;
 
-    protected void attachView(T view) {
+    public void attachView(T view) {
         this.view = view;
     }
 

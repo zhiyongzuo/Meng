@@ -49,7 +49,7 @@ public class DictionaryFragment extends BaseDictionayFragment {
         tvDictionary = view.findViewById(R.id.tv_dictionary);
 
         mList = mPresenter.getAllRealmDictionary();
-        Logger.d(mList.size());
+        //Logger.d(mList.size());
         if (mList!=null && mList.size() > 0) {
             init();
         } else {
@@ -80,7 +80,7 @@ public class DictionaryFragment extends BaseDictionayFragment {
     }
 
     private void init() {
-        Logger.d("init");
+        //Logger.d("init");
         mDictionaryAdapter = new DictionaryAdapter(getContext(), mList);
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
         linearLayout.setStackFromEnd(true);

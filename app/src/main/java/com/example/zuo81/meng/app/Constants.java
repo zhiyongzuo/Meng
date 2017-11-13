@@ -16,4 +16,9 @@ public class Constants {
     public static final String BUCKET_NAME = "alwaysblue";
     public static final Charset UTF_8 = Charset.forName("UTF-8");
     public static final String TEST_DOMAIN = "http://7xu8tp.com1.z0.glb.clouddn.com/";
+    public static final String SHAREDPREFERENCES_XML_NAME = "34636";
+    public static final String SHAREDPREFERENCES_NUMBER_KEY = "4326457347";
+    public static final String SHAREDPREFERENCES_PAGE_NUMBER_KEY = "3257347";
+    public static final String DETAIL_FRAGMENT_PIC_POSITION = "34";
+    public static final String DETAIL_FRAGMENT_PIC_LIST = "6967";
 }

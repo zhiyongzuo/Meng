@@ -5,5 +5,8 @@ package com.example.zuo81.meng.ui.share;
  */
 
 public interface ShareView {
-    void closeActivity();
+
+    void showProgress(int i);
+
+    void hideProgress(long number);
 }
