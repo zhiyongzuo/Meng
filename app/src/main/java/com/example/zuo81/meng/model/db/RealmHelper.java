@@ -69,12 +69,12 @@ public class RealmHelper implements DBHelper {
         return mRealm.copyFromRealm(results);
     }
 
-    public List<RealmPhotoBean> getTenRealmPhotoList(int pageNumber) {
+    public List<RealmPhotoBean> getTwentyRealmPhotoList(int pageNumber) {
         //assert pageNumber<0;
         RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
         List<RealmPhotoBean> clipResults = new ArrayList<>();
-        int startNumber = results.size() - (pageNumber - 1) * 10;
-        for(int n=startNumber; n>startNumber-10 & n>0; n--) {
+        int startNumber = results.size() - (pageNumber - 1) * 20;
+        for(int n=startNumber; n>startNumber-20 & n>0; n--) {
             //如果个数是11，则results.get(10)
             clipResults.add(results.get(n-1));
         }

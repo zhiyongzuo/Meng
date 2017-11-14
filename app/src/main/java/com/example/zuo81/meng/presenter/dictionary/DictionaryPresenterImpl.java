@@ -77,7 +77,6 @@ public class DictionaryPresenterImpl extends RxPresenter<DictionaryView> impleme
 
     @Override
     public List<RealmDictionaryBean> getAllRealmDictionary() {
-        Logger.d("getAllRealmDictionary");
         return mRealmHelper.getAllRealmDictionaryList();
     }
 

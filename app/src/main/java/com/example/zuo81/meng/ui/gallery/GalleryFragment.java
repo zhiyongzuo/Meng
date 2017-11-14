@@ -115,6 +115,10 @@ public class GalleryFragment extends SupportFragment implements GalleryView
 
     @Override
     public void jump(List<RealmPhotoBean> mList) {
+        //没有图片时isLoadingMore为true，会导致不能再加载，重置一下
+        if(isLoadingMore) {
+            isLoadingMore = false;
+        }
         list.clear();
         list.addAll(mList);
         adapter.notifyDataSetChanged();

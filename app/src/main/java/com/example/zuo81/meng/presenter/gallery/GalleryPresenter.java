@@ -40,10 +40,10 @@ public class GalleryPresenter extends RxPresenter<GalleryView> {
             if (size <=10) {
                 list = realmHelper.getAllRealmPhotoList();
             } else {
-                list = realmHelper.getTenRealmPhotoList(pageNumber);
+                list = realmHelper.getTwentyRealmPhotoList(pageNumber);
             }
         } else {
-            list = realmHelper.getTenRealmPhotoList(pageNumber);
+            list = realmHelper.getTwentyRealmPhotoList(pageNumber);
         }
         return list;
     }
@@ -53,28 +53,41 @@ public class GalleryPresenter extends RxPresenter<GalleryView> {
                 .edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1).apply();
         pageNumber = context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
                 .getInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1);
-        view.refresh(realmHelper.getTenRealmPhotoList(pageNumber));
+        view.refresh(realmHelper.getTwentyRealmPhotoList(pageNumber));
         Logger.d("refreshData" + pageNumber);
+        //geeknews在realm数据库请求没有使用rxjava
+        /*addToCompositeDisposable(Observable.create(new ObservableOnSubscribe<List<RealmPhotoBean>>() {
+            @Override
+            public void subscribe(ObservableEmitter<List<RealmPhotoBean>> e) throws Exception {
+                e.onNext(realmHelper.getTwentyRealmPhotoList(pageNumber));
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<List<RealmPhotoBean>>() {
+            @Override
+            public void accept(List<RealmPhotoBean> s) throws Exception {
+                view.refresh(s);
+                Logger.d("refreshData" + pageNumber);
+            }
+        }));*/
     }
 
     public void loadMoreData() {
         pageNumber = context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
                 .getInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1);
         pageNumber += 1;
-        if(realmHelper.getTenRealmPhotoList(pageNumber).size() > 0) {
+        if(realmHelper.getTwentyRealmPhotoList(pageNumber).size() > 0) {
             context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
                     .edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, pageNumber).apply();
             Logger.d("loadMore" + pageNumber);
         }
-        view.loadMore(realmHelper.getTenRealmPhotoList(pageNumber));
+        view.loadMore(realmHelper.getTwentyRealmPhotoList(pageNumber));
     }
 
     public void jumpData(int pageNumber) {
-        if (realmHelper.getTenRealmPhotoList(pageNumber).size() > 0) {
+        if (realmHelper.getTwentyRealmPhotoList(pageNumber).size() > 0) {
             context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
                     .edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, pageNumber).apply();
             Logger.d("jump" + pageNumber);
         }
-        view.jump(realmHelper.getTenRealmPhotoList(pageNumber));
+        view.jump(realmHelper.getTwentyRealmPhotoList(pageNumber));
     }
 }
