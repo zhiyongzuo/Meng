@@ -28,8 +28,10 @@ public class LocalMusicFragment extends SupportFragment implements MusicView {
     private LocalMusicListAdapter adapter;
     private List<LocalMusicBean> mList;
 
-    public LocalMusicFragment() {
+    public String getTitle() {
+        return "11";
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -10,7 +10,7 @@ import io.realm.RealmObject;
 
 public class ShanBeiBean {
 
-
+//此bean复杂，不能拿来给realm用。。必须重新建一个。所以有点奇怪
     /**
      * msg : SUCCESS
      * status_code : 0

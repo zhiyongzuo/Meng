@@ -44,7 +44,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
 
     @Override
     public void onBindViewHolder(GalleryViewHolder holder, final int position) {
-        Glide.with(context).load(list.get(position).getPhotoUrl()).into(holder.iv);
+        //Glide.with(context).load(list.get(position).getPhotoUrl()).into(holder.iv);
+        //GlideApp.with(context).load(list.get(position).getPhotoUrl()).diskCacheStrategy().into(holder.iv);
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
