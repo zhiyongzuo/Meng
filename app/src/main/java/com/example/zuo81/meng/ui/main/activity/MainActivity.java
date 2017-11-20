@@ -205,13 +205,19 @@ public class MainActivity extends SupportActivity
             if(backUpFile.exists()) {
                 backUpFile.delete();
             }
+            /*try {
+                //java.lang.IllegalArgumentException: The destination file must not exist
+                backUpFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
             Realm realm = Realm.getDefaultInstance();
             realm.writeCopyTo(backUpFile);
 
             UploadOptions upOptions = new UploadOptions(null, null, false, new UpProgressHandler() {
                 @Override
                 public void progress(String s, double v) {
-                    Logger.d(s + " / " + v);
+                    //Logger.d(s + " / " + v);
                 }
             }, new UpCancellationSignal() {
                 @Override
@@ -262,6 +268,7 @@ public class MainActivity extends SupportActivity
                             if(restoreFile.exists()) {
                                 restoreFile.delete();
                             }
+                            //restoreFile.createNewFile();
                             URL url = new URL(restore_url);
                             HttpURLConnection urlConn = (HttpURLConnection)url.openConnection();
                             is = urlConn.getInputStream();

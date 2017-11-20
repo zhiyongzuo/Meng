@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
@@ -14,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.base.MVPBaseFragment;
+import com.example.zuo81.meng.base.contract.gallery.Gallery;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
 import com.example.zuo81.meng.presenter.gallery.GalleryPresenter;
 import com.example.zuo81.meng.ui.gallery.adapter.GalleryAdapter;
@@ -21,20 +22,23 @@ import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
+import butterknife.BindView;
 import cn.qqtheme.framework.picker.NumberPicker;
-import cn.qqtheme.framework.widget.WheelView;
-import me.yokeyword.fragmentation.SupportFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class GalleryFragment extends SupportFragment implements GalleryView
+public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implements Gallery.View
         , SwipeRefreshLayout.OnRefreshListener, View.OnClickListener, GalleryAdapter.OnItemClickListener {
-    private RecyclerView rvGallery;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private FloatingActionButton fab;
+
+    @BindView(R.id.fab_fragment_gallery)
+    FloatingActionButton fab;
+    @BindView(R.id.rv_fragment_gallery)
+    RecyclerView rvGallery;
+    @BindView(R.id.swipe_refresh_layout_fragment_gallery)
+    SwipeRefreshLayout swipeRefreshLayout;
+
     private GalleryAdapter adapter;
-    private GalleryPresenter presenter;
     private List<RealmPhotoBean> list;
     private boolean isLoadingMore = false;
 
@@ -42,19 +46,20 @@ public class GalleryFragment extends SupportFragment implements GalleryView
         return new GalleryFragment();
     }
 
+    @Override
+    protected void initInject() {
+        getFragmentComponent().inject(this);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_gallery, container, false);
-        fab = view.findViewById(R.id.fab_fragment_gallery);
-        rvGallery = view.findViewById(R.id.rv_fragment_gallery);
-        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout_fragment_gallery);
+    protected int getLayoutId() {
+        return R.layout.fragment_gallery;
+    }
 
+    @Override
+    protected void initEventAndData() {
         fab.setOnClickListener(this);
         swipeRefreshLayout.setOnRefreshListener(this);
-        presenter = new GalleryPresenter(this, getContext());
         final StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         //mStaggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         //fix issue #52 https://github.com/codeestX/GeekNews/issues/52
@@ -77,7 +82,6 @@ public class GalleryFragment extends SupportFragment implements GalleryView
                 }
             }
         });
-        return view;
     }
 
     @Override
@@ -119,10 +123,14 @@ public class GalleryFragment extends SupportFragment implements GalleryView
         if(isLoadingMore) {
             isLoadingMore = false;
         }
-        list.clear();
-        list.addAll(mList);
-        adapter.notifyDataSetChanged();
-        Toast.makeText(getContext(), "jump success", Toast.LENGTH_SHORT).show();
+        if (mList.size() > 0) {
+            list.clear();
+            list.addAll(mList);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(getContext(), "jump success", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "no data", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -154,5 +162,10 @@ public class GalleryFragment extends SupportFragment implements GalleryView
             default:
                 break;
         }
+    }
+
+    @Override
+    public void showErrorMsg(String msg) {
+
     }
 }

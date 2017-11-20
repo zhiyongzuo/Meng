@@ -8,36 +8,32 @@ import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.example.zuo81.meng.R;
-import com.example.zuo81.meng.base.ShareBaseActivity;
+import com.example.zuo81.meng.base.MVPBaseActivity;
+import com.example.zuo81.meng.base.contract.share.Share;
+import com.example.zuo81.meng.di.Component.ActivityComponent;
 import com.example.zuo81.meng.presenter.share.SharePresenter;
 import com.orhanobut.logger.Logger;
 
+import butterknife.BindView;
+
 import static android.content.Intent.EXTRA_STREAM;
 
-public class SharePicActivity extends ShareBaseActivity<SharePresenter> implements ShareView {
-    private String url;
-    private NumberProgressBar numberProgressBar;
-    private SharePresenter presenter;
+public class SharePicActivity extends MVPBaseActivity<SharePresenter> implements Share.View {
+    @BindView(R.id.activity_share_number_progress_bar)
+    NumberProgressBar numberProgressBar;
 
-    public void showProgress(int progress) {
-        numberProgressBar.setProgress(progress);
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_share_pic;
     }
 
     @Override
-    public void hideProgress(long number) {
-        Toast.makeText(this, number + " upload success", Toast.LENGTH_SHORT).show();
-        numberProgressBar.setVisibility(View.GONE);
-        finish();
+    public void initInject() {
+        getActivityComponent().inject(this);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_share_pic);
-        numberProgressBar = (NumberProgressBar)findViewById(R.id.activity_share_number_progress_bar);
-
-        presenter = new SharePresenter(this, this);
-
+    public void initEventAndData() {
         Intent intent = getIntent();
         if(intent!=null && intent.getExtras()!=null && intent.getExtras().containsKey(EXTRA_STREAM)) {
             Uri uri = (Uri)intent.getExtras().getParcelable(EXTRA_STREAM);
@@ -66,9 +62,19 @@ public class SharePicActivity extends ShareBaseActivity<SharePresenter> implemen
         }
     }
 
+    public void showProgress(int progress) {
+        numberProgressBar.setProgress(progress);
+    }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.detachView();
+    public void hideProgress(long number) {
+        Toast.makeText(this, number + " upload success", Toast.LENGTH_SHORT).show();
+        numberProgressBar.setVisibility(View.GONE);
+        finish();
+    }
+
+    @Override
+    public void showErrorMsg(String msg) {
+
     }
 }

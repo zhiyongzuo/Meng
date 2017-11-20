@@ -1,5 +1,8 @@
 package com.example.zuo81.meng.app;
 
+import android.os.Environment;
+
+import java.io.File;
 import java.nio.charset.Charset;
 
 /**
@@ -21,4 +24,11 @@ public class Constants {
     public static final String SHAREDPREFERENCES_PAGE_NUMBER_KEY = "3257347";
     public static final String DETAIL_FRAGMENT_PIC_POSITION = "34";
     public static final String DETAIL_FRAGMENT_PIC_LIST = "6967";
+
+    public static final String PATH_DATA = App.getInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
+
+    public static final String PATH_CACHE = PATH_DATA + "/NetCache";
+    public static final String PATH_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Meng" + File.separator + "IMG";
+
+
 }

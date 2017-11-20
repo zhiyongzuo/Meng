@@ -9,6 +9,8 @@ import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.reactivex.Flowable;
 
 import static com.example.zuo81.meng.model.http.api.BaiDuApis.Method_play;
@@ -23,6 +25,11 @@ public class RetrofitHelper implements HttpHelper {
     private ShanBeiApis mShanBeiApis;
     private BaiDuApis mBaiDuApis;
 
+    @Inject
+    public RetrofitHelper(ShanBeiApis shanBeiApis, BaiDuApis baiDuApis) {
+        mShanBeiApis = shanBeiApis;
+        mBaiDuApis = baiDuApis;
+    }
 
     @Override
     public Flowable<ShanBeiBean> fetchShanBeiSearchInfo(String s) {

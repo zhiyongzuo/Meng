@@ -6,6 +6,8 @@ import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
@@ -18,6 +20,7 @@ public class RealmHelper implements DBHelper {
 
     private Realm mRealm;
 
+    @Inject
     public RealmHelper() {
         mRealm = Realm.getDefaultInstance();
     }
@@ -48,6 +51,10 @@ public class RealmHelper implements DBHelper {
         RealmDictionaryBean results = mRealm.where(RealmDictionaryBean.class).findFirst();
         return mRealm.copyFromRealm(results);
     }
+
+
+
+
     //      Photo
     public void insertPhotoBean(RealmPhotoBean bean) {
         mRealm.beginTransaction();
@@ -64,11 +71,13 @@ public class RealmHelper implements DBHelper {
         mRealm.commitTransaction();
     }
 
+    @Override
     public List<RealmPhotoBean> getAllRealmPhotoList() {
         RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
         return mRealm.copyFromRealm(results);
     }
 
+    @Override
     public List<RealmPhotoBean> getTwentyRealmPhotoList(int pageNumber) {
         //assert pageNumber<0;
         RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();

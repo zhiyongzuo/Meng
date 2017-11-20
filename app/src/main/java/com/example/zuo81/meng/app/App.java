@@ -3,6 +3,10 @@ package com.example.zuo81.meng.app;
 import android.app.Activity;
 import android.app.Application;
 
+import com.example.zuo81.meng.di.Component.AppComponent;
+import com.example.zuo81.meng.di.Component.DaggerAppComponent;
+import com.example.zuo81.meng.di.module.AppModule;
+import com.example.zuo81.meng.di.module.HttpModule;
 import com.facebook.stetho.Stetho;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
@@ -10,7 +14,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 
 
 /**
@@ -20,6 +23,7 @@ import io.realm.RealmConfiguration;
 public class App extends Application {
     private static App instance;
     private Set<Activity> allActivities;
+    private static AppComponent appComponent;
 
     public static synchronized App getInstance() {
         return instance;
@@ -63,5 +67,14 @@ public class App extends Application {
         System.exit(0);
     }
 
+    public static AppComponent getAppComponent() {
+        if(appComponent == null) {
+            appComponent = DaggerAppComponent.builder()
+                    .appModule(new AppModule(instance))
+                    .httpModule(new HttpModule())
+                    .build();
+        }
+        return appComponent;
+    }
 
 }

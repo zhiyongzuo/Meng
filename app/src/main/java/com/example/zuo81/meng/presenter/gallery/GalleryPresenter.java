@@ -1,59 +1,50 @@
 package com.example.zuo81.meng.presenter.gallery;
 
-import android.content.Context;
-
-import com.example.zuo81.meng.base.presenter.RxPresenter;
+import com.example.zuo81.meng.base.contract.gallery.Gallery;
+import com.example.zuo81.meng.base.presenter.RxBasePresenter;
+import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
-import com.example.zuo81.meng.model.db.RealmHelper;
-import com.example.zuo81.meng.ui.gallery.GalleryView;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_PAGE_NUMBER_KEY;
-import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_XML_NAME;
+import javax.inject.Inject;
 
 /**
  * Created by zuo81 on 2017/11/9.
  */
 
-public class GalleryPresenter extends RxPresenter<GalleryView> {
-    private RealmHelper realmHelper;
+public class GalleryPresenter extends RxBasePresenter<Gallery.View> implements Gallery.Presenter {
+    private DataManager mDataManager;
     private List<RealmPhotoBean> list;
-    private Context context;
     private int pageNumber = 1;
 
-    public GalleryPresenter(GalleryView view, Context context) {
-        this.context = context;
-        attachView(view);
-        realmHelper = new RealmHelper();
-        pageNumber = context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
-                .getInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1);
-        Logger.d("constractor" + pageNumber);
+    @Inject
+    public GalleryPresenter(DataManager mDataManater) {
+        this.mDataManager = mDataManater;
     }
 
+    @Override
     public List<RealmPhotoBean> getData() {
+        pageNumber = mDataManager.getSPNumber();
         Logger.d("getData" + pageNumber);
         if (pageNumber==1) {
-            int size = realmHelper.getAllRealmPhotoList().size();
+            int size = mDataManager.getAllRealmPhotoList().size();
             if (size <=10) {
-                list = realmHelper.getAllRealmPhotoList();
+                list = mDataManager.getAllRealmPhotoList();
             } else {
-                list = realmHelper.getTwentyRealmPhotoList(pageNumber);
+                list = mDataManager.getTwentyRealmPhotoList(pageNumber);
             }
         } else {
-            list = realmHelper.getTwentyRealmPhotoList(pageNumber);
+            list = mDataManager.getTwentyRealmPhotoList(pageNumber);
         }
         return list;
     }
 
     public void refreshData() {
-        context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
-                .edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1).apply();
-        pageNumber = context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
-                .getInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1);
-        view.refresh(realmHelper.getTwentyRealmPhotoList(pageNumber));
+        mDataManager.setSPNumber(1);
+        pageNumber = mDataManager.getSPNumber();
+        view.refresh(mDataManager.getTwentyRealmPhotoList(pageNumber));
         Logger.d("refreshData" + pageNumber);
         //geeknews在realm数据库请求没有使用rxjava
         /*addToCompositeDisposable(Observable.create(new ObservableOnSubscribe<List<RealmPhotoBean>>() {
@@ -71,23 +62,21 @@ public class GalleryPresenter extends RxPresenter<GalleryView> {
     }
 
     public void loadMoreData() {
-        pageNumber = context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
-                .getInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1);
+        pageNumber = mDataManager.getSPNumber();
+        Logger.d(pageNumber);
         pageNumber += 1;
-        if(realmHelper.getTwentyRealmPhotoList(pageNumber).size() > 0) {
-            context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
-                    .edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, pageNumber).apply();
+        if(mDataManager.getTwentyRealmPhotoList(pageNumber).size() > 0) {
+            mDataManager.setSPNumber(pageNumber);
             Logger.d("loadMore" + pageNumber);
         }
-        view.loadMore(realmHelper.getTwentyRealmPhotoList(pageNumber));
+        view.loadMore(mDataManager.getTwentyRealmPhotoList(pageNumber));
     }
 
     public void jumpData(int pageNumber) {
-        if (realmHelper.getTwentyRealmPhotoList(pageNumber).size() > 0) {
-            context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE)
-                    .edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, pageNumber).apply();
+        if (mDataManager.getTwentyRealmPhotoList(pageNumber).size() > 0) {
+            mDataManager.setSPNumber(pageNumber);
             Logger.d("jump" + pageNumber);
         }
-        view.jump(realmHelper.getTwentyRealmPhotoList(pageNumber));
+        view.jump(mDataManager.getTwentyRealmPhotoList(pageNumber));
     }
 }

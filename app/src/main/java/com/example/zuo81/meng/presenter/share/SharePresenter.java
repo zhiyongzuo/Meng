@@ -2,10 +2,11 @@ package com.example.zuo81.meng.presenter.share;
 
 import android.content.Context;
 
-import com.example.zuo81.meng.base.presenter.RxPresenter;
+import com.example.zuo81.meng.base.contract.share.Share;
+import com.example.zuo81.meng.base.presenter.RxBasePresenter;
+import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
 import com.example.zuo81.meng.model.db.RealmHelper;
-import com.example.zuo81.meng.ui.share.ShareView;
 import com.orhanobut.logger.Logger;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCancellationSignal;
@@ -16,6 +17,8 @@ import com.qiniu.android.storage.UploadOptions;
 import org.json.JSONObject;
 
 import java.io.File;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -34,21 +37,23 @@ import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
  * Created by zuo81 on 2017/11/6.
  */
 
-public class SharePresenter extends RxPresenter<ShareView> {
-    private RealmHelper realmHelper;
+public class SharePresenter extends RxBasePresenter<Share.View> implements Share.Presenter {
     private String key;
     private long i;
     private boolean isInsertIntoDBed= false;
     private boolean isUploaded= false;
+    private DataManager mDataManager;
 
-    public SharePresenter(ShareView view, Context context) {
+    @Inject
+    public SharePresenter(DataManager mDataManager) {
+        this.mDataManager = mDataManager;
         attachView(view);
-        realmHelper = new RealmHelper();
-        i = context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE).getLong(SHAREDPREFERENCES_NUMBER_KEY, 0);
-        context.getSharedPreferences(SHAREDPREFERENCES_XML_NAME, MODE_PRIVATE).edit().putLong(SHAREDPREFERENCES_NUMBER_KEY, i + 1).apply();
+        i = mDataManager.getSPId();
+        mDataManager.setSPId(i);
         key = "alwaysblue" + i + ".png";
     }
 
+    @Override
     public void inserIntoPicUrlDB() {
         Logger.d("insertIntoPicUrlDB");
         addToCompositeDisposable(Observable.create(new ObservableOnSubscribe<String>() {
@@ -58,7 +63,7 @@ public class SharePresenter extends RxPresenter<ShareView> {
                 bean.setId(i);
                 Logger.d(key);
                 bean.setPhotoUrl(TEST_DOMAIN + key);
-                realmHelper.insertPhotoBean(bean);
+                mDataManager.insertPhotoBean(bean);
                 e.onNext("s");
             }
         }).subscribeOn(AndroidSchedulers.mainThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<String>() {
@@ -100,11 +105,5 @@ public class SharePresenter extends RxPresenter<ShareView> {
                     }
                 }
                 ));
-    }
-
-    @Override
-    public void detachView() {
-        super.detachView();
-        realmHelper.close();
     }
 }

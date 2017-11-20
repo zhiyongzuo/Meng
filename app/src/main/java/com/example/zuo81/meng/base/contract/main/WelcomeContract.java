@@ -1,7 +1,7 @@
 package com.example.zuo81.meng.base.contract.main;
 
 import com.example.zuo81.meng.base.BasePresenter;
-import com.example.zuo81.meng.ui.welcome.WelcomeView;
+import com.example.zuo81.meng.base.BaseView;
 import com.example.zuo81.meng.model.bean.WelcomeBean;
 
 /**
@@ -10,9 +10,11 @@ import com.example.zuo81.meng.model.bean.WelcomeBean;
 
 public interface WelcomeContract {
 
-    interface View extends WelcomeView {
+    interface View extends BaseView {
 
-        void showContent(WelcomeBean welcomeBean);
+        void showPic(WelcomeBean welcomeBean);
+
+        void showAuthor(String authorStr);
 
         void jumpToMain();
     }

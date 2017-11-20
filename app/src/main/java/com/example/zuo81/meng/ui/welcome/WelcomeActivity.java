@@ -9,15 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.base.MVPBaseActivity;
+import com.example.zuo81.meng.base.contract.welcome.Welcome;
+import com.example.zuo81.meng.di.Component.ActivityComponent;
 import com.example.zuo81.meng.model.bean.WelcomeBean;
-import com.example.zuo81.meng.presenter.welcome.WelcomePresenter;
 import com.example.zuo81.meng.presenter.welcome.WelcomePresenterImp;
 import com.example.zuo81.meng.ui.main.activity.MainActivity;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 
+import butterknife.BindView;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnNeverAskAgain;
 import permissions.dispatcher.OnPermissionDenied;
@@ -27,20 +29,26 @@ import permissions.dispatcher.RuntimePermissions;
 
 
 @RuntimePermissions
-public class WelcomeActivity extends AppCompatActivity implements WelcomeView {
-    private ImageView ivWelcomeBg;
-    private TextView tvWelcomeAuthor;
-    private WelcomePresenter mWelcomePresenter;
+public class WelcomeActivity extends MVPBaseActivity<WelcomePresenterImp> implements Welcome.View{
+    @BindView(R.id.iv_welcome_bg)
+    ImageView ivWelcomeBg;
+    @BindView(R.id.tv_welcome_author)
+    TextView tvWelcomeAuthor;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
-        ivWelcomeBg = findViewById(R.id.iv_welcome_bg);
-        tvWelcomeAuthor = findViewById(R.id.tv_welcome_author);
+    public int getLayoutId() {
+        return R.layout.activity_welcome;
+    }
+
+    @Override
+    public void initInject() {
+        getActivityComponent().inject(this);
+    }
+
+    @Override
+    public void initEventAndData() {
         Logger.addLogAdapter(new AndroidLogAdapter());
-        mWelcomePresenter = new WelcomePresenterImp(this);
-        mWelcomePresenter.loadWelcomePic();
+        presenter.loadWelcomePic();
     }
 
     @Override
@@ -59,12 +67,6 @@ public class WelcomeActivity extends AppCompatActivity implements WelcomeView {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        mWelcomePresenter.onDestroy();
-        super.onDestroy();
     }
 
     @NeedsPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
@@ -91,5 +93,10 @@ public class WelcomeActivity extends AppCompatActivity implements WelcomeView {
     @OnNeverAskAgain({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void onNeverAskAgain() {
         Logger.d("onNeverAskAgain");
+    }
+
+    @Override
+    public void showErrorMsg(String msg) {
+
     }
 }

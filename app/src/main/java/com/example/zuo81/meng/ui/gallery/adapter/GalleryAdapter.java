@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.app.GlideApp;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
-import com.orhanobut.logger.Logger;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     @Override
     public void onBindViewHolder(GalleryViewHolder holder, final int position) {
         //Glide.with(context).load(list.get(position).getPhotoUrl()).into(holder.iv);
-        //GlideApp.with(context).load(list.get(position).getPhotoUrl()).diskCacheStrategy().into(holder.iv);
+        GlideApp.with(context).load(list.get(position).getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv);
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

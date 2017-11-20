@@ -32,4 +32,5 @@
         <item>#2093cd</item>
         <item>#ad62a7</item>
     </array>
+    <string name="title_activity_no_mvpbase">NoMVPBaseActivity</string>
 </resources>

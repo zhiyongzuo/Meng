@@ -1,13 +1,10 @@
 package com.example.zuo81.meng.base;
 
-import android.os.Bundle;
-
-import com.example.zuo81.meng.base.presenter.RxPresenter;
-import com.example.zuo81.meng.ui.welcome.WelcomeView;
+import com.example.zuo81.meng.base.presenter.RxBasePresenter;
 
 import me.yokeyword.fragmentation.SupportActivity;
 
-public abstract class BaseActivity<T extends RxPresenter> extends SupportActivity {
+public abstract class BaseActivity<T extends RxBasePresenter> extends SupportActivity {
 
     protected T presenter;
 

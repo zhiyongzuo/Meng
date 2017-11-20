@@ -1,17 +1,17 @@
 package com.example.zuo81.meng.presenter.music;
 
 import com.example.zuo81.meng.app.Constants;
-import com.example.zuo81.meng.base.presenter.RxPresenter;
+import com.example.zuo81.meng.base.contract.music.SearchMusic;
+import com.example.zuo81.meng.base.presenter.RxBasePresenter;
 import com.example.zuo81.meng.component.RXBus;
-import com.example.zuo81.meng.model.ApiClient;
+import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.music.BaiDuMusicSearchBean;
 import com.example.zuo81.meng.model.event.SearchEvent;
-import com.example.zuo81.meng.model.http.RetrofitHelper;
-import com.example.zuo81.meng.model.http.api.BaiDuApis;
-import com.example.zuo81.meng.ui.music.view.MusicView;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -24,14 +24,17 @@ import io.reactivex.subscribers.ResourceSubscriber;
  * Created by zuo81 on 2017/11/2.
  */
 
-public class SearchMusicPresenter extends RxPresenter<MusicView> {
+public class SearchMusicPresenter extends RxBasePresenter<SearchMusic.View> implements SearchMusic.Presenter {
+    private DataManager mDataManager;
 
-    RetrofitHelper helper;
+    @Inject
+    public SearchMusicPresenter(DataManager dataManager) {
+        mDataManager = dataManager;
+    }
 
     @Override
-    public void attachView(MusicView view) {
+    public void attachView(SearchMusic.View view) {
         super.attachView(view);
-        helper = ApiClient.retrofit(BaiDuApis.Host).create(RetrofitHelper.class);
         registerEvent();
     }
 
@@ -70,7 +73,7 @@ public class SearchMusicPresenter extends RxPresenter<MusicView> {
     }
 
     public void getMusic(String s) {
-        addToCompositeDisposable(helper.searchMusicListInfo(s)
+        addToCompositeDisposable(mDataManager.searchMusicListInfo(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<BaiDuMusicSearchBean>>() {

@@ -1,20 +1,23 @@
 package com.example.zuo81.meng.presenter.dictionary;
 
 import com.example.zuo81.meng.app.Constants;
-import com.example.zuo81.meng.base.presenter.RxPresenter;
+import com.example.zuo81.meng.base.contract.dictionary.Dictionary;
+import com.example.zuo81.meng.base.presenter.RxBasePresenter;
 import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.ApiClient;
+import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.model.db.RealmHelper;
 import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.model.http.api.ShanBeiApis;
-import com.example.zuo81.meng.ui.dictionary.view.DictionaryView;
 import com.example.zuo81.meng.utils.RxUtil;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
 import java.util.UUID;
+
+import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Function;
@@ -27,17 +30,18 @@ import static com.example.zuo81.meng.model.http.api.ShanBeiApis.Host;
  * Created by zuo81 on 2017/10/26.
  */
 
-public class DictionaryPresenterImpl extends RxPresenter<DictionaryView> implements DictionaryPresenter {
+public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> implements Dictionary.Presenter {
 
-    private ShanBeiApis mShanBeiApis;
-    private RealmHelper mRealmHelper;
+    private DataManager mDataManager;
+
+    @Inject
+    public DictionaryPresenterImpl(DataManager mDataManager) {
+        this.mDataManager = mDataManager;
+    }
 
     @Override
-    public void attachView(DictionaryView view) {
+    public void attachView(Dictionary.View view) {
         super.attachView(view);
-        //mDataManager = new DataManager(this);
-        mShanBeiApis = ApiClient.retrofit(Host).create(ShanBeiApis.class);
-        mRealmHelper = new RealmHelper();
         registerEvent();
     }
 
@@ -77,7 +81,7 @@ public class DictionaryPresenterImpl extends RxPresenter<DictionaryView> impleme
 
     @Override
     public List<RealmDictionaryBean> getAllRealmDictionary() {
-        return mRealmHelper.getAllRealmDictionaryList();
+        return mDataManager.getAllRealmDictionaryList();
     }
 
     @Override
@@ -88,22 +92,16 @@ public class DictionaryPresenterImpl extends RxPresenter<DictionaryView> impleme
         bean.setId(tempmID);
         bean.setEnglish(english);
         bean.setChinese(chinese);
-        mRealmHelper.insertDictionaryBean(bean);
+        mDataManager.insertDictionaryBean(bean);
     }
 
     public void deleteDictionaryData(long id) {
-        mRealmHelper.deleteDictionaryBean(id);
-    }
-
-    @Override
-    public void detachView() {
-        super.detachView();
-        mRealmHelper.close();
+        mDataManager.deleteDictionaryBean(id);
     }
 
     private void getSearchDictionaryData(String s) {
         Logger.d(s);
-        Flowable<ShanBeiBean> observable = mShanBeiApis.getDictionaryInfo(s);
+        Flowable<ShanBeiBean> observable = mDataManager.fetchShanBeiSearchInfo(s);
         addToCompositeDisposable(observable
                 .compose(RxUtil.<ShanBeiBean>rxSchedulerHelper())
                 .subscribeWith(new ResourceSubscriber<ShanBeiBean>() {
@@ -115,7 +113,7 @@ public class DictionaryPresenterImpl extends RxPresenter<DictionaryView> impleme
 
                     @Override
                     public void onComplete() {
-                        Logger.d("oncomplete");
+//                        Logger.d("oncomplete");
                     }
 
                     @Override

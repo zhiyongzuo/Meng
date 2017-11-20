@@ -1,21 +1,16 @@
 package com.example.zuo81.meng.presenter.welcome;
 
-import android.text.TextUtils;
-
-import com.example.zuo81.meng.model.WelcomeModel;
-import com.example.zuo81.meng.model.WelcomeModelImpl;
+import com.example.zuo81.meng.base.contract.welcome.Welcome;
+import com.example.zuo81.meng.base.presenter.RxBasePresenter;
+import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.WelcomeBean;
-import com.example.zuo81.meng.model.http.api.ShanBeiApis;
 import com.example.zuo81.meng.model.http.api.WelcomeApis;
-import com.example.zuo81.meng.presenter.welcome.WelcomePresenter;
-import com.example.zuo81.meng.ui.welcome.WelcomeView;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.orhanobut.logger.Logger;
 
-import io.reactivex.Observer;
+import javax.inject.Inject;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
@@ -25,17 +20,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by zuo81 on 2017/10/25.
  */
 
-public class WelcomePresenterImp implements WelcomePresenter, WelcomeModel.OnShowPicListener {
+public class WelcomePresenterImp extends RxBasePresenter<Welcome.View> implements Welcome.Presenter{
 
-    private WelcomeView mWelcomeView;
-    private WelcomeModel mWelcomeModel;
+    private DataManager mDataManager;
     private WelcomeApis api;
     private CompositeDisposable mCompositeDisposable;
 
-    public WelcomePresenterImp(WelcomeView welcomeView) {
-        this.mWelcomeView = welcomeView;
-        mWelcomeModel = new WelcomeModelImpl();
-
+    @Inject
+    public WelcomePresenterImp(DataManager mDataManager) {
+        this.mDataManager = mDataManager;
     }
 
     @Override
@@ -56,32 +49,16 @@ public class WelcomePresenterImp implements WelcomePresenter, WelcomeModel.OnSho
                 .doOnNext(new Consumer<WelcomeBean>() {
                     @Override
                     public void accept(WelcomeBean welcomeBean) throws Exception {
-                        mWelcomeView.showPic(welcomeBean);
+                        view.showPic(welcomeBean);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WelcomeBean>() {
                     @Override
                     public void accept(WelcomeBean welcomeBean) throws Exception {
-                        mWelcomeView.jumpToMain();
+                        view.jumpToMain();
                     }
                 });
         //mWelcomeModel.getPic(this);
-    }
-
-
-    @Override
-    public void onSuccess(String url) {
-    }
-
-    @Override
-    public void onFailure() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-        mWelcomeView = null;
-        mWelcomeModel = null;
     }
 }
