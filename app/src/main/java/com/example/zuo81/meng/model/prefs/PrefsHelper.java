@@ -10,7 +10,9 @@ public interface PrefsHelper {
 
     void setSPNumber(int pageNumber);
 
-    long getSPId();
 
-    void setSPId(long i);
+
+    void setWelcomePicUrl(String url);
+
+    String getWelcomePicUrl();
 }

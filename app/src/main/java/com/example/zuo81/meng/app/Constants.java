@@ -20,15 +20,19 @@ public class Constants {
     public static final Charset UTF_8 = Charset.forName("UTF-8");
     public static final String TEST_DOMAIN = "http://7xu8tp.com1.z0.glb.clouddn.com/";
     public static final String SHAREDPREFERENCES_XML_NAME = "34636";
-    public static final String SHAREDPREFERENCES_NUMBER_KEY = "4326457347";
-    public static final String SHAREDPREFERENCES_PAGE_NUMBER_KEY = "3257347";
+    public static final String SHAREDPREFERENCES_PIC_NUMBER_KEY = "4326457347";
+    public static final String SHAREDPREFERENCES_GALLERY_PAGE_NUMBER_KEY = "3257347";
+    public static final String SHAREDPREFERENCES_WELCOME_PIC_URL = "3252352342347347";
     public static final String DETAIL_FRAGMENT_PIC_POSITION = "34";
+    public static final String DETAIL_FRAGMENT_PIC_URL = "33retg4";
     public static final String DETAIL_FRAGMENT_PIC_LIST = "6967";
 
     public static final String PATH_DATA = App.getInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
 
     public static final String PATH_CACHE = PATH_DATA + "/NetCache";
     public static final String PATH_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Meng" + File.separator + "IMG";
+    public static final String SPLASH = "splash.png";
 
+    public static final String EXTRA_NAME_DETAIL_PIC_ACTIVITY = "FLJLW4TJ4523";
 
 }

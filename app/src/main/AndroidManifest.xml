@@ -33,6 +33,11 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        //pic detail
+        <activity
+            android:name="ui.gallery.DetailPicActivity"
+            android:theme="@style/SplashTheme">
+        </activity>
         //share
         <activity
             android:name=".ui.share.SharePicActivity"

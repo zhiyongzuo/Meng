@@ -21,6 +21,7 @@ import com.example.zuo81.meng.ui.dictionary.DictionaryFragment;
 import com.example.zuo81.meng.ui.gallery.GalleryFragment;
 import com.example.zuo81.meng.ui.main.view.MainView;
 import com.example.zuo81.meng.ui.music.MusicMainFragment;
+import com.example.zuo81.meng.utils.FileUtils;
 import com.orhanobut.logger.Logger;
 import com.qiniu.android.common.AutoZone;
 import com.qiniu.android.http.ResponseInfo;
@@ -55,6 +56,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 import static com.example.zuo81.meng.app.Constants.BUCKET_NAME;
 import static com.example.zuo81.meng.app.Constants.TEST_DOMAIN;
+import static com.example.zuo81.meng.utils.FileUtils.restoreFromBackUp;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
 
@@ -67,8 +69,6 @@ public class MainActivity extends SupportActivity
     //qiniu
     String key = "default.realm";
     String dbPath = Realm.getDefaultInstance().getPath();
-    //
-    public InputStream is;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +151,6 @@ public class MainActivity extends SupportActivity
 
         int id = item.getItemId();
         if(id == R.id.nav_dictionary) {
-            Logger.d("dictionary");
             showFragment = Constants.TYPE_DICTIONARY;
             DictionaryFragment fragment = findFragment(DictionaryFragment.class);
             if (fragment == null) {
@@ -161,7 +160,6 @@ public class MainActivity extends SupportActivity
                 popTo(DictionaryFragment.class, false);
             }
         }else if(id == R.id.nav_music) {
-            Toast.makeText(this, "nav_music", Toast.LENGTH_SHORT).show();
             showFragment = Constants.TYPE_SEARCH_MUSIC;
             MusicMainFragment mMusicFragment = findFragment(MusicMainFragment.class);
             if(mMusicFragment == null) {
@@ -177,7 +175,6 @@ public class MainActivity extends SupportActivity
         }else if (id == R.id.nav_camera) {
 //
         } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this, "nav_gallery", Toast.LENGTH_SHORT).show();
             GalleryFragment mGalleryFragment = findFragment(GalleryFragment.class);
             if(mGalleryFragment == null) {
                 //如果targetFragmentClass不是DictionaryClass,则不会跳转fragment
@@ -196,12 +193,7 @@ public class MainActivity extends SupportActivity
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_backup) {
-            String backUpPath = Environment.getExternalStorageDirectory() + "/Meng/BackUp";
-            File backUpathFile = new File(backUpPath);
-            if(!backUpathFile.exists()) {
-                backUpathFile.mkdirs();
-            }
-            File backUpFile = new File(backUpathFile, key);
+            File backUpFile = new File(FileUtils.getExternalFileDir("BackUp"), key);
             if(backUpFile.exists()) {
                 backUpFile.delete();
             }
@@ -233,22 +225,13 @@ public class MainActivity extends SupportActivity
                         Logger.d("ok");
                         Toast.makeText(MainActivity.this, "backup success", Toast.LENGTH_SHORT).show();
                     } else {
-                        Logger.d("failure");
                         Logger.d(responseInfo.error);
                     }
                 }
             }, upOptions);
 
         } else if (id == R.id.nav_restore) {
-            try {
-                FileChannel inChannel = new FileInputStream(new File(Environment.getExternalStorageDirectory() + "/Meng/BackUp", key)).getChannel();
-                FileChannel outChannel = new FileOutputStream(new File(dbPath)).getChannel();
-                inChannel.transferTo(0, inChannel.size(), outChannel);
-                inChannel.close();
-                outChannel.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            restoreFromBackUp(FileUtils.getExternalFileDir("BackUp") + File.separator + key, dbPath);
             /*final String restore_url = TEST_DOMAIN + key + "?v=" + UUID.randomUUID().getLeastSignificantBits();
             Realm realm = Realm.getDefaultInstance();
             if (!realm.isClosed()) {

@@ -2,8 +2,11 @@ package com.example.zuo81.meng.model.http.api;
 
 import com.example.zuo81.meng.model.bean.WelcomeBean;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import okhttp3.ResponseBody;
 import retrofit2.http.GET;
+import retrofit2.http.Url;
 
 /**
  * Created by zuo81 on 2017/10/26.
@@ -14,5 +17,8 @@ public interface WelcomeApis {
     String HOST = "http://www.bing.com/";
 
     @GET("/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN")
-    Observable<WelcomeBean> getWelcomeInfo();
+    Flowable<WelcomeBean> getWelcomeInfo();
+
+    @GET
+    Flowable<ResponseBody> downloadWelcomePicWithDynamicUrl(@Url String url);
 }

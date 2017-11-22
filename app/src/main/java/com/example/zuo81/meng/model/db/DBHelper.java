@@ -17,6 +17,7 @@ public interface DBHelper {
 
     void insertPhotoBean(RealmPhotoBean bean);
 
+    long getSPId();
 
 
 //Dictionary

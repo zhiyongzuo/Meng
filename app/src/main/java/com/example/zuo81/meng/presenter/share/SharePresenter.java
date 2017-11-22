@@ -1,12 +1,9 @@
 package com.example.zuo81.meng.presenter.share;
 
-import android.content.Context;
-
 import com.example.zuo81.meng.base.contract.share.Share;
 import com.example.zuo81.meng.base.presenter.RxBasePresenter;
 import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
-import com.example.zuo81.meng.model.db.RealmHelper;
 import com.orhanobut.logger.Logger;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCancellationSignal;
@@ -26,9 +23,6 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 
-import static android.content.Context.MODE_PRIVATE;
-import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_XML_NAME;
-import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_NUMBER_KEY;
 import static com.example.zuo81.meng.app.Constants.TEST_DOMAIN;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
@@ -47,10 +41,6 @@ public class SharePresenter extends RxBasePresenter<Share.View> implements Share
     @Inject
     public SharePresenter(DataManager mDataManager) {
         this.mDataManager = mDataManager;
-        attachView(view);
-        i = mDataManager.getSPId();
-        mDataManager.setSPId(i);
-        key = "alwaysblue" + i + ".png";
     }
 
     @Override
@@ -80,7 +70,8 @@ public class SharePresenter extends RxBasePresenter<Share.View> implements Share
 
     public void uploadToQinyun(String path) {
         File picFile = new File(path);
-        Logger.d(key);
+        i = mDataManager.getSPId() + 1;
+        key = "alwaysblue" + i + ".png";
         getUploadManagerInstance().put(picFile, key, getUpToken(key)
                 , new UpCompletionHandler() {
                     @Override
@@ -104,6 +95,7 @@ public class SharePresenter extends RxBasePresenter<Share.View> implements Share
                         return false;
                     }
                 }
-                ));
+                )
+        );
     }
 }

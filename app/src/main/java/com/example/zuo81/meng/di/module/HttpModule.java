@@ -4,8 +4,10 @@ import com.example.zuo81.meng.BuildConfig;
 import com.example.zuo81.meng.app.Constants;
 import com.example.zuo81.meng.di.qualifier.QualifierBaidu;
 import com.example.zuo81.meng.di.qualifier.QualifierShanbei;
+import com.example.zuo81.meng.di.qualifier.QualifierWelcome;
 import com.example.zuo81.meng.model.http.api.BaiDuApis;
 import com.example.zuo81.meng.model.http.api.ShanBeiApis;
+import com.example.zuo81.meng.model.http.api.WelcomeApis;
 import com.example.zuo81.meng.utils.SystemUtil;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -49,6 +51,13 @@ public class HttpModule {
         return createRetrofit(builder, client, BaiDuApis.Host);
     }
 
+    @QualifierWelcome
+    @Singleton
+    @Provides
+    Retrofit provideWelcomeRetrofit(Retrofit.Builder builder, OkHttpClient client) {
+        return createRetrofit(builder, client, WelcomeApis.HOST);
+    }
+
     @Singleton
     @Provides
     ShanBeiApis provideShanBeiApis(@QualifierShanbei Retrofit retrofit) {
@@ -59,6 +68,12 @@ public class HttpModule {
     @Provides
     BaiDuApis provideBaiduApis(@QualifierBaidu Retrofit retrofit) {
         return retrofit.create(BaiDuApis.class);
+    }
+
+    @Singleton
+    @Provides
+    WelcomeApis provideWelcomeApid(@QualifierWelcome Retrofit retrofit) {
+        return retrofit.create(WelcomeApis.class);
     }
 
     @Singleton

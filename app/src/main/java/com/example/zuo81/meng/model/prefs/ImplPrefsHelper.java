@@ -7,8 +7,9 @@ import com.example.zuo81.meng.app.App;
 import javax.inject.Inject;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_NUMBER_KEY;
-import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_PAGE_NUMBER_KEY;
+import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_PIC_NUMBER_KEY;
+import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_GALLERY_PAGE_NUMBER_KEY;
+import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_WELCOME_PIC_URL;
 import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_XML_NAME;
 
 /**
@@ -26,26 +27,23 @@ public class ImplPrefsHelper implements PrefsHelper {
 
     @Override
     public void setSPNumber(int pageNumber) {
-        sp.edit().putInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, pageNumber).apply();
+        sp.edit().putInt(SHAREDPREFERENCES_GALLERY_PAGE_NUMBER_KEY, pageNumber).apply();
 
     }
 
     @Override
     public int getSPNumber() {
-        return sp.getInt(SHAREDPREFERENCES_PAGE_NUMBER_KEY, 1);
-    }
-
-
-
-
-    @Override
-    public void setSPId(long i) {
-        sp.edit().putLong(SHAREDPREFERENCES_NUMBER_KEY, i + 1).apply();
+        return sp.getInt(SHAREDPREFERENCES_GALLERY_PAGE_NUMBER_KEY, 1);
     }
 
     @Override
-    public long getSPId() {
-        return  sp.getLong(SHAREDPREFERENCES_NUMBER_KEY, 0);
+    public void setWelcomePicUrl(String url) {
+        sp.edit().putString(SHAREDPREFERENCES_WELCOME_PIC_URL, url).apply();
+    }
+
+    @Override
+    public String getWelcomePicUrl() {
+        return sp.getString(SHAREDPREFERENCES_WELCOME_PIC_URL, "");
     }
 }
 

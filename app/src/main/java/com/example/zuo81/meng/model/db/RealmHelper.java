@@ -12,6 +12,8 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
+import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_PIC_NUMBER_KEY;
+
 /**
  * Created by zuo81 on 2017/10/27.
  */
@@ -89,6 +91,14 @@ public class RealmHelper implements DBHelper {
         }
         return mRealm.copyFromRealm(clipResults);
     }
+
+    @Override
+    public long getSPId() {
+        RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
+        return results.size();
+    }
+
+
 
     public void close() {
         if (!mRealm.isClosed()) {

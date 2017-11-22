@@ -1,5 +1,6 @@
 package com.example.zuo81.meng.model;
 
+import com.example.zuo81.meng.model.bean.WelcomeBean;
 import com.example.zuo81.meng.model.bean.music.BaiDuMusicSearchBean;
 import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
@@ -11,6 +12,7 @@ import com.example.zuo81.meng.model.prefs.PrefsHelper;
 import java.util.List;
 
 import io.reactivex.Flowable;
+import okhttp3.ResponseBody;
 
 /**
  * Created by zuo81 on 2017/10/31.
@@ -26,6 +28,29 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
         this.mHttpHelper = httpHelper;
         this.dbHelper = dbHelper;
         this.prefsHelper = prefsHelper;
+    }
+
+    //Welcome Pic
+
+
+    @Override
+    public Flowable<ResponseBody> fetchPicFromUrl(String url) {
+        return mHttpHelper.fetchPicFromUrl(url);
+    }
+
+    @Override
+    public void setWelcomePicUrl(String url) {
+        prefsHelper.setWelcomePicUrl(url);
+    }
+
+    @Override
+    public String getWelcomePicUrl() {
+        return prefsHelper.getWelcomePicUrl();
+    }
+
+    @Override
+    public Flowable<WelcomeBean> fetchWelcomePicBean() {
+        return mHttpHelper.fetchWelcomePicBean();
     }
 
     //ShanBei
@@ -78,6 +103,11 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
         return dbHelper.getTwentyRealmPhotoList(pageNumber);
     }
 
+    @Override
+    public long getSPId() {
+        return dbHelper.getSPId();
+    }
+
 
 
     //      SP
@@ -89,15 +119,5 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
     @Override
     public int getSPNumber() {
         return prefsHelper.getSPNumber();
-    }
-
-    @Override
-    public void setSPId(long i) {
-        prefsHelper.setSPId(i);
-    }
-
-    @Override
-    public long getSPId() {
-        return prefsHelper.getSPId();
     }
 }

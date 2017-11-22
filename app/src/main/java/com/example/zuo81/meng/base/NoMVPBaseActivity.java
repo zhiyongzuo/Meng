@@ -1,5 +1,6 @@
 package com.example.zuo81.meng.base;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,11 +17,13 @@ import me.yokeyword.fragmentation.SupportActivity;
 
 public abstract class NoMVPBaseActivity extends SupportActivity {
     private Unbinder unbinder;
+    protected Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        context = this;
         unbinder = ButterKnife.bind(this);
         App.getInstance().addActivity(this);
         initEventAndData();
@@ -34,7 +37,7 @@ public abstract class NoMVPBaseActivity extends SupportActivity {
         unbinder.unbind();
     }
 
-    public abstract int getLayoutId();
-    public abstract void initEventAndData();
+    protected abstract int getLayoutId();
+    protected abstract void initEventAndData();
 
 }

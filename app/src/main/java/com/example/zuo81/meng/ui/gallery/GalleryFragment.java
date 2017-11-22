@@ -1,6 +1,7 @@
 package com.example.zuo81.meng.ui.gallery;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import cn.qqtheme.framework.picker.NumberPicker;
+
+import static com.example.zuo81.meng.app.Constants.EXTRA_NAME_DETAIL_PIC_ACTIVITY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -135,7 +138,10 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
 
     @Override
     public void onClick(int position, List<RealmPhotoBean> list) {
-        //start(DetailPicFragment.newInstance(position, list));
+//        start(DetailPicActivity.newInstance(position, list));
+        Intent intent = new Intent(getActivity(), DetailPicActivity.class);
+        intent.putExtra(EXTRA_NAME_DETAIL_PIC_ACTIVITY, list.get(position).getPhotoUrl());
+        startActivity(intent);
     }
 
     @Override

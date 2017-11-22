@@ -1,20 +1,29 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  xmlns:tools="http://schemas.android.com/tools"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:background="#fff"
-                  tools:context="com.example.zuo81.meng.ui.welcome.WelcomeActivity">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/test"
+    tools:context="com.example.zuo81.meng.ui.welcome.WelcomeActivity">
 
     <ImageView
         android:id="@+id/iv_welcome_bg"
-        android:background="@drawable/test"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="600dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_welcome_author"/>
     <TextView
         android:id="@+id/tv_welcome_author"
-        android:layout_gravity="bottom|end"
         tools:text="344"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/iv_welcome_bg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
