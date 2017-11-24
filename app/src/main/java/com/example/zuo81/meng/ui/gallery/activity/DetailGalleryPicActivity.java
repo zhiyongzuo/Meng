@@ -1,8 +1,7 @@
-package com.example.zuo81.meng.ui.gallery;
+package com.example.zuo81.meng.ui.gallery.activity;
 
-
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 
 import com.example.zuo81.meng.R;
@@ -15,13 +14,10 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.example.zuo81.meng.app.Constants.DETAIL_FRAGMENT_PIC_URL;
 import static com.example.zuo81.meng.app.Constants.EXTRA_NAME_DETAIL_PIC_ACTIVITY;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class DetailPicActivity extends NoMVPBaseActivity {
+public class DetailGalleryPicActivity extends NoMVPBaseActivity {
+
     @BindView(R.id.photo_view)
     PhotoView photoView;
 

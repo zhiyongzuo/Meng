@@ -52,9 +52,7 @@ public class WelcomePresenterImp extends RxBasePresenter<Welcome.View> implement
                     @Override
                     public void accept(WelcomeBean welcomeBean) throws Exception {
                         String url = "http://www.bing.com" + welcomeBean.getImages().get(0).getUrl();
-                        Logger.d(url);
-                        Logger.d(String.format(Locale.getDefault(), "http://www.bing.com", url));
-                        if (!TextUtils.isEmpty(url) && !mDataManager.getWelcomePicUrl().equals(url)) {
+                        if (!mDataManager.getWelcomePicUrl().equals(url)) {
                             mDataManager.setWelcomePicUrl(url);
                             save = true;
                         } else {

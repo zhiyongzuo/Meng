@@ -7,6 +7,8 @@ import com.example.zuo81.meng.app.App;
 import javax.inject.Inject;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_FILTER_SIZE;
+import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_FILTER_TIME;
 import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_PIC_NUMBER_KEY;
 import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_GALLERY_PAGE_NUMBER_KEY;
 import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_WELCOME_PIC_URL;
@@ -45,6 +47,7 @@ public class ImplPrefsHelper implements PrefsHelper {
     public String getWelcomePicUrl() {
         return sp.getString(SHAREDPREFERENCES_WELCOME_PIC_URL, "");
     }
+
 }
 
 

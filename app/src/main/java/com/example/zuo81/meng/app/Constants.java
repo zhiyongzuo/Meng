@@ -23,6 +23,8 @@ public class Constants {
     public static final String SHAREDPREFERENCES_PIC_NUMBER_KEY = "4326457347";
     public static final String SHAREDPREFERENCES_GALLERY_PAGE_NUMBER_KEY = "3257347";
     public static final String SHAREDPREFERENCES_WELCOME_PIC_URL = "3252352342347347";
+    public static final String SHAREDPREFERENCES_FILTER_SIZE = "3252352DGGSSS342347347";
+    public static final String SHAREDPREFERENCES_FILTER_TIME = "DFS3252352DGGSSS342347347";
     public static final String DETAIL_FRAGMENT_PIC_POSITION = "34";
     public static final String DETAIL_FRAGMENT_PIC_URL = "33retg4";
     public static final String DETAIL_FRAGMENT_PIC_LIST = "6967";

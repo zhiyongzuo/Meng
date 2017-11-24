@@ -23,11 +23,18 @@ import static com.example.zuo81.meng.app.Constants.TYPE_PLAY_MUSIC;
  * Created by zuo81 on 2017/11/3.
  */
 
-public class SearchMusicListAdapter extends RecyclerView.Adapter<SearchMusicListAdapter.SearchViewHolder> {
+public class OnlineMusicListAdapter extends RecyclerView.Adapter<OnlineMusicListAdapter.SearchViewHolder> {
     private Context context;
     private List<BaiDuMusicSearchBean> mList;
+    private OnDetailClickListener listener;
+    public interface OnDetailClickListener {
+        void click();
+    }
+    public void setOnDeleteClickListener(OnDetailClickListener listener) {
+           this.listener = listener;
+    }
 
-    public SearchMusicListAdapter(Context context, List<BaiDuMusicSearchBean> list) {
+    public OnlineMusicListAdapter(Context context, List<BaiDuMusicSearchBean> list) {
         this.context = context;
         mList = list;
     }
@@ -64,9 +71,10 @@ public class SearchMusicListAdapter extends RecyclerView.Adapter<SearchMusicList
                                     case 1:
                                         //ringtone
                                         break;
-                                   /* case 2:
+                                    case 2:
                                         //delete
-                                        break;*/
+                                        //setOnDetailClickListener(listener);
+                                        break;
                                     default:
                                         break;
                                 }

@@ -1,9 +1,11 @@
 package com.example.zuo81.meng.ui.welcome;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
@@ -65,12 +67,14 @@ public class WelcomeActivity extends MVPBaseActivity<WelcomePresenterImp> implem
         }
     }
 
+    @TargetApi(16)
     @Override
     public void showPic() {
         File file = new File(PATH_SDCARD, SPLASH);
         if(file.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-            ivWelcomeBg.setImageBitmap(bitmap);
+            //ivWelcomeBg.setImageBitmap(bitmap);
+            ivWelcomeBg.setBackground(new BitmapDrawable(bitmap));
         }
         jumpToMain();
     }
@@ -95,7 +99,6 @@ public class WelcomeActivity extends MVPBaseActivity<WelcomePresenterImp> implem
 
     @NeedsPermission({Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void needsPermission() {
-        Logger.d("needsPermission");
         presenter.updateWelcomePic();
     }
 

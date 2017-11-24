@@ -1,7 +1,9 @@
 package com.example.zuo81.meng.ui.music.fragment;
 
 
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -10,7 +12,7 @@ import com.example.zuo81.meng.base.MVPBaseFragment;
 import com.example.zuo81.meng.base.contract.music.SearchMusic;
 import com.example.zuo81.meng.model.bean.music.BaiDuMusicSearchBean;
 import com.example.zuo81.meng.presenter.music.SearchMusicPresenter;
-import com.example.zuo81.meng.ui.music.adapter.SearchMusicListAdapter;
+import com.example.zuo81.meng.ui.music.adapter.OnlineMusicListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,7 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
     @BindView(R.id.rv_music_search_fragment)
     RecyclerView rvSearchMusic;
 
-    private SearchMusicListAdapter adapter;
+    private OnlineMusicListAdapter adapter;
     private List<BaiDuMusicSearchBean> list;
 
     @Override
@@ -40,7 +42,13 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
     @Override
     protected void initEventAndData() {
         list = new ArrayList<>();
-        adapter = new SearchMusicListAdapter(getContext(), list);
+        adapter = new OnlineMusicListAdapter(getContext(), list);
+        adapter.setOnDeleteClickListener(new OnlineMusicListAdapter.OnDetailClickListener() {
+            @Override
+            public void click() {
+
+            }
+        });
         rvSearchMusic.setLayoutManager(new LinearLayoutManager(getContext()));
         rvSearchMusic.setAdapter(adapter);
     }

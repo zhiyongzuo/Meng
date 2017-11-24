@@ -1,6 +1,8 @@
 package com.example.zuo81.meng.base;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +22,15 @@ import me.yokeyword.fragmentation.SupportFragment;
  */
 public abstract class NoMVPBaseFragment extends SupportFragment {
     private Unbinder unbinder;
+    protected Context context;
+    protected Activity activity;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+        this.activity = (Activity)context;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -3,6 +3,9 @@ package com.example.zuo81.meng.utils;
 import android.content.Context;
 import android.os.Environment;
 
+import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.app.App;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,7 +21,8 @@ import java.nio.channels.FileChannel;
 public class FileUtils {
 
     private static String getAppDir() {
-        return Environment.getExternalStorageDirectory() +File.separator + "Meng" + File.separator;
+        //return Environment.getExternalStorageDirectory() +File.separator + "Meng" + File.separator;
+        return Environment.getExternalStorageDirectory() +File.separator + App.getInstance().getApplicationContext().getString(R.string.app_name) + File.separator;
     }
 
     private static String mkdirs(String dir) {

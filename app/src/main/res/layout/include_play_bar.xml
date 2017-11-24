@@ -2,8 +2,9 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="57dp"
+    android:layout_height="55dp"
     android:id="@+id/play_bar"
+    android:background="#fff"
     android:descendantFocusability="afterDescendants"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -36,6 +37,14 @@
         app:layout_constraintLeft_toLeftOf="@+id/tv_play_bar_song_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_play_bar_song_name"
         app:layout_constraintBottom_toBottomOf="@+id/iv_play_bar_album_pic"/>
+    <ImageView
+        android:id="@+id/iv_play_bar_pre"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_play_bar_btn_pre"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/iv_play_bar_play"/>
     <ImageView
         android:id="@+id/iv_play_bar_play"
         android:layout_width="50dp"

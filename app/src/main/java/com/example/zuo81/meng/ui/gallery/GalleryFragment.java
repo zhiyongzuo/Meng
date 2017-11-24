@@ -18,6 +18,7 @@ import com.example.zuo81.meng.base.MVPBaseFragment;
 import com.example.zuo81.meng.base.contract.gallery.Gallery;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
 import com.example.zuo81.meng.presenter.gallery.GalleryPresenter;
+import com.example.zuo81.meng.ui.gallery.activity.DetailGalleryPicActivity;
 import com.example.zuo81.meng.ui.gallery.adapter.GalleryAdapter;
 import com.orhanobut.logger.Logger;
 
@@ -139,9 +140,9 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
     @Override
     public void onClick(int position, List<RealmPhotoBean> list) {
 //        start(DetailPicActivity.newInstance(position, list));
-        Intent intent = new Intent(getActivity(), DetailPicActivity.class);
+        Intent intent = new Intent(getActivity(), DetailGalleryPicActivity.class);
         intent.putExtra(EXTRA_NAME_DETAIL_PIC_ACTIVITY, list.get(position).getPhotoUrl());
-        startActivity(intent);
+        getActivity().startActivity(intent);
     }
 
     @Override
