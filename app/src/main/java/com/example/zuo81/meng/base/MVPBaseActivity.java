@@ -22,7 +22,7 @@ public abstract class MVPBaseActivity<T extends RxBasePresenter> extends NoMVPBa
 
     protected ActivityComponent getActivityComponent() {
         return DaggerActivityComponent.builder()
-                .appComponent(App.getInstance().getAppComponent())
+                .appComponent(App.getAppComponent())
                 .build();
     }
 

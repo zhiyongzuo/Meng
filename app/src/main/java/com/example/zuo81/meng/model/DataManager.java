@@ -120,4 +120,16 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
     public int getSPNumber() {
         return prefsHelper.getSPNumber();
     }
+
+
+
+    @Override
+    public void setCurrentSongId(long id) {
+        prefsHelper.setCurrentSongId(id);
+    }
+
+    @Override
+    public long getCurrentSongId() {
+        return prefsHelper.getCurrentSongId();
+    }
 }

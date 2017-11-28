@@ -15,4 +15,10 @@ public interface PrefsHelper {
     void setWelcomePicUrl(String url);
 
     String getWelcomePicUrl();
+
+
+
+    void setCurrentSongId(long id);
+
+    long getCurrentSongId();
 }

@@ -3,7 +3,7 @@ package com.example.zuo81.meng.di.Component;
 import com.example.zuo81.meng.di.scope.ActivityScope;
 import com.example.zuo81.meng.ui.main.activity.MainActivity;
 import com.example.zuo81.meng.ui.share.SharePicActivity;
-import com.example.zuo81.meng.ui.welcome.WelcomeActivity;
+import com.example.zuo81.meng.ui.welcome.SplashActivity;
 
 import dagger.Component;
 
@@ -14,7 +14,7 @@ import dagger.Component;
 @Component(dependencies = AppComponent.class)
 public interface ActivityComponent {
 
-    void inject(WelcomeActivity activity);
+    void inject(SplashActivity activity);
 
     void inject(MainActivity activity);
 

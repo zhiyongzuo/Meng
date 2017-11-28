@@ -46,13 +46,14 @@ public class LocalMusicListAdapter extends RecyclerView.Adapter<LocalMusicListAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final LocalMusicBean songListBean = MusicUtils.getLocalMusicList().get(position);
+        MusicUtils.getPlayService().showUI(songListBean);
         holder.tvSongName.setText(songListBean.getTitle());
         holder.tvAuthorAlbum.setText(songListBean.getArtist() + " - " + songListBean.getAlbum());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), TYPE_PLAY_MUSIC));
-                MusicUtils.getPlayService().play(songListBean);
+                MusicUtils.getPlayService().playMusic(songListBean);
             }
         });
         holder.iv_detail.setOnClickListener(new View.OnClickListener() {

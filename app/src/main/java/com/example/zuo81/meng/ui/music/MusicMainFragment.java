@@ -12,8 +12,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
+import com.example.zuo81.meng.app.GlideApp;
 import com.example.zuo81.meng.base.NoMVPBaseFragment;
 import com.example.zuo81.meng.component.PlayService;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
@@ -22,11 +25,16 @@ import com.example.zuo81.meng.ui.music.adapter.MyFragmentPagerAdapter;
 import com.example.zuo81.meng.ui.music.fragment.LocalMusicFragment;
 import com.example.zuo81.meng.ui.music.fragment.SearchMusicFragment;
 import com.example.zuo81.meng.utils.MusicUtils;
+import com.orhanobut.logger.Logger;
+import com.xyzlf.share.library.bean.ShareEntity;
+import com.xyzlf.share.library.interfaces.ShareConstant;
+import com.xyzlf.share.library.util.ShareUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import me.wcy.lrcview.LrcView;
 
 /**
  * Created by zuo81 on 2017/11/1.
@@ -39,6 +47,16 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
     ViewPager mViewPager;
     @BindView(R.id.play_bar)
     ConstraintLayout mConstraintView;
+    @BindView(R.id.iv_play_bar_album_pic)
+    ImageView ivAlbumPic;
+    @BindView(R.id.tv_play_bar_song_name)
+    TextView tvSongName;
+    @BindView(R.id.tv_play_bar_song_author)
+    TextView tvSongAuthor;
+    @BindView(R.id.iv_play_bar_lrc_view)
+    LrcView lrcView;
+    @BindView(R.id.pb_play_bar)
+    ProgressBar pbPlayBar;
     @BindView(R.id.iv_play_bar_play)
     ImageView ivPlay;
     @BindView(R.id.iv_play_bar_next)
@@ -68,13 +86,13 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
                 bindService();
             }
         }, 1000);
-        MusicUtils.getPlayService().setOnPlayerEventListener(this);
         list = new ArrayList<>();
         list.add(new LocalMusicFragment());
         list.add(new SearchMusicFragment());
         mConstraintView.setOnClickListener(this);
         ivPlay.setOnClickListener(this);
         ivNext.setOnClickListener(this);
+        ivAlbumPic.setOnClickListener(this);
 
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getChildFragmentManager(), list);
         mViewPager.setAdapter(adapter);
@@ -91,12 +109,11 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
         switch(view.getId()) {
             case R.id.play_bar:
                 break;
+            case R.id.iv_play_bar_album_pic:
+                MusicUtils.getPlayService().share(getActivity());
+                break;
             case R.id.iv_play_bar_play:
-                    if() {
-                        MusicUtils.getPlayService().play();
-                    } else {
-                        MusicUtils.getPlayService().pause();
-                    }
+                MusicUtils.getPlayService().play();
                 break;
             case R.id.iv_play_bar_pre:
                 break;
@@ -124,12 +141,27 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             PlayService playService = ((PlayService.PlayBinder)iBinder).getService();
             MusicUtils.setPlayService(playService);
+            playService.setOnPlayerEventListener(MusicMainFragment.this);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
 
         }
+    }
+
+    @Override
+    public void showUI(LocalMusicBean bean) {
+        //lrcView.loadLrc(bean.)
+        GlideApp.with(context).load(bean.getCoverPath()).into(ivAlbumPic);
+        tvSongName.setText(bean.getTitle());
+        tvSongAuthor.setText(bean.getArtist() + " - " + bean.getAlbum());
+        pbPlayBar.setMax((int)bean.getDuration());
+        pbPlayBar.setProgress((int)MusicUtils.getPlayService().getCurrentPosition());
+    }
+
+    public void showPlayHistory() {
+
     }
 
 

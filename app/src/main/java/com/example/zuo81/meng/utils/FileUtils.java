@@ -14,6 +14,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
+import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
+import static com.example.zuo81.meng.app.Constants.SPLASH;
+import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
+
 /**
  * Created by zuo81 on 2017/11/22.
  */
@@ -22,7 +26,7 @@ public class FileUtils {
 
     private static String getAppDir() {
         //return Environment.getExternalStorageDirectory() +File.separator + "Meng" + File.separator;
-        return Environment.getExternalStorageDirectory() +File.separator + App.getInstance().getApplicationContext().getString(R.string.app_name) + File.separator;
+        return APP_DIRECTORY;
     }
 
     private static String mkdirs(String dir) {
@@ -53,6 +57,11 @@ public class FileUtils {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean isFileExists(String path, String name) {
+        File file = new File(path, name);
+        return file.exists();
     }
 
     public static boolean writeInputStreamToDisk(InputStream inputStream, String path, String name) {

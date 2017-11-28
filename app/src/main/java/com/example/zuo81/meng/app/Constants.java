@@ -2,6 +2,8 @@ package com.example.zuo81.meng.app;
 
 import android.os.Environment;
 
+import com.example.zuo81.meng.R;
+
 import java.io.File;
 import java.nio.charset.Charset;
 
@@ -10,7 +12,7 @@ import java.nio.charset.Charset;
  */
 
 public class Constants {
-
+    public static final String MAP = "MAP";
     public static final int TYPE_DICTIONARY = 106;
     public static final int TYPE_SEARCH_MUSIC = 16;
     public static final int TYPE_PLAY_MUSIC = 4646;
@@ -25,16 +27,21 @@ public class Constants {
     public static final String SHAREDPREFERENCES_WELCOME_PIC_URL = "3252352342347347";
     public static final String SHAREDPREFERENCES_FILTER_SIZE = "3252352DGGSSS342347347";
     public static final String SHAREDPREFERENCES_FILTER_TIME = "DFS3252352DGGSSS342347347";
+    public static final String SHAREDPREFERENCES_CURRENT_SONG_ID = "DFDF3S3252352DGGSSS342347347";
     public static final String DETAIL_FRAGMENT_PIC_POSITION = "34";
     public static final String DETAIL_FRAGMENT_PIC_URL = "33retg4";
     public static final String DETAIL_FRAGMENT_PIC_LIST = "6967";
 
-    public static final String PATH_DATA = App.getInstance().getCacheDir().getAbsolutePath() + File.separator + "data";
+    public static final String DATA = "data";
+    public static final String NET_CACHE = "NetCache";
+    public static final String PATH_DATA = App.getInstance().getCacheDir().getAbsolutePath() + File.separator + DATA;
 
-    public static final String PATH_CACHE = PATH_DATA + "/NetCache";
-    public static final String PATH_SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Meng" + File.separator + "IMG";
+    public static final String PATH_CACHE = PATH_DATA + File.separator + DATA +  NET_CACHE;
+    public static final String SPLASH_PIC_DIRECTORY_NAME = "pic";
     public static final String SPLASH = "splash.png";
 
     public static final String EXTRA_NAME_DETAIL_PIC_ACTIVITY = "FLJLW4TJ4523";
+
+    public static final String APP_DIRECTORY = Environment.getExternalStorageDirectory() +File.separator + App.getInstance().getApplicationContext().getString(R.string.app_name) + File.separator;
 
 }

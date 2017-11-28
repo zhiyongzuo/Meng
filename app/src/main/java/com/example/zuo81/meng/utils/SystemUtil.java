@@ -72,9 +72,9 @@ public class SystemUtil {
      * @param url
      * @param bitmap
      */
-    public static Uri saveBitmapToFile(Context context, String url, Bitmap bitmap, View container, boolean isShare){
+    /*public static Uri saveBitmapToFile(Context context, String url, Bitmap bitmap, View container, boolean isShare){
         String fileName = url.substring(url.lastIndexOf("/"),url.lastIndexOf(".")) + ".png";
-        File fileDir = new File(Constants.PATH_SDCARD);
+        File fileDir = new File(Constants.SPLASH_PIC_PATH_SDCARD);
         if (!fileDir.exists()){
             fileDir.mkdirs();
         }
@@ -104,7 +104,7 @@ public class SystemUtil {
         }
         context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,uri));
         return uri;
-    }
+    }*/
 
     /**
      * 根据手机的分辨率从 dp 的单位 转成为 px(像素)

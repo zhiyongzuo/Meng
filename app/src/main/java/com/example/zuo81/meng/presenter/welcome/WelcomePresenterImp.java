@@ -7,6 +7,7 @@ import com.example.zuo81.meng.base.presenter.RxBasePresenter;
 import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.WelcomeBean;
 import com.example.zuo81.meng.model.http.api.WelcomeApis;
+import com.example.zuo81.meng.utils.FileUtils;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -25,6 +26,10 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+
+import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
+import static com.example.zuo81.meng.app.Constants.SPLASH;
+import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
 
 /**
  * Created by zuo81 on 2017/10/25.
@@ -52,12 +57,14 @@ public class WelcomePresenterImp extends RxBasePresenter<Welcome.View> implement
                     @Override
                     public void accept(WelcomeBean welcomeBean) throws Exception {
                         String url = "http://www.bing.com" + welcomeBean.getImages().get(0).getUrl();
-                        if (!mDataManager.getWelcomePicUrl().equals(url)) {
-                            mDataManager.setWelcomePicUrl(url);
-                            save = true;
-                        } else {
+                        if (mDataManager.getWelcomePicUrl().equals(url)
+                                && FileUtils.isFileExists(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH)) {
                             view.showPic();
                             save = false;
+                        } else {
+                            Logger.d(url);
+                            mDataManager.setWelcomePicUrl(url);
+                            save = true;
                         }
                     }
                 })

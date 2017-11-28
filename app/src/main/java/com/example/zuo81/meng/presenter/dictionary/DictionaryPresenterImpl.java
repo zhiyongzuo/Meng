@@ -31,12 +31,15 @@ import static com.example.zuo81.meng.model.http.api.ShanBeiApis.Host;
  */
 
 public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> implements Dictionary.Presenter {
-
-    private DataManager mDataManager;
-
     @Inject
+    DataManager mDataManager;
+
+    /*@Inject
     public DictionaryPresenterImpl(DataManager mDataManager) {
         this.mDataManager = mDataManager;
+    }*/
+    @Inject
+    public DictionaryPresenterImpl() {
     }
 
     @Override

@@ -11,8 +11,10 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 
+import com.example.zuo81.meng.app.App;
 import com.example.zuo81.meng.component.PlayService;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,6 +137,58 @@ public class MusicUtils {
         cursor.close();
 
         return musicList;
+    }
+
+    public static LocalMusicBean queryFromId(long id) {
+        Cursor cursor = App.getInstance().getContentResolver().query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[]{
+                        BaseColumns._ID,
+                        MediaStore.Audio.AudioColumns.IS_MUSIC,
+                        MediaStore.Audio.AudioColumns.TITLE,
+                        MediaStore.Audio.AudioColumns.ARTIST,
+                        MediaStore.Audio.AudioColumns.ALBUM,
+                        MediaStore.Audio.AudioColumns.ALBUM_ID,
+                        MediaStore.Audio.AudioColumns.DATA,
+                        MediaStore.Audio.AudioColumns.DISPLAY_NAME,
+                        MediaStore.Audio.AudioColumns.SIZE,
+                        MediaStore.Audio.AudioColumns.DURATION
+                }, BaseColumns._ID,
+                new String[]{String.valueOf(id)},
+                MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
+        if(cursor == null) {
+            Logger.d("no music in that id");
+        }
+        LocalMusicBean music = new LocalMusicBean();
+        while (cursor.moveToNext()) {
+            // 是否为音乐，魅族手机上始终为0
+            int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.IS_MUSIC));
+            if (!SystemUtils.isFlyme() && isMusic == 0) {
+                continue;
+            }
+
+            String title = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE)));
+            String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
+            String album = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM)));
+            long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID));
+            long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+            String path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA));
+            String fileName = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME)));
+            long fileSize = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
+
+            //music.setId(id);
+            music.setType(LocalMusicBean.Type.LOCAL);
+            music.setTitle(title);
+            music.setArtist(artist);
+            music.setAlbum(album);
+            music.setAlbumId(albumId);
+            music.setDuration(duration);
+            music.setPath(path);
+            music.setFileName(fileName);
+            music.setFileSize(fileSize);
+        }
+        cursor.close();
+        return music;
     }
 
     public static Uri getMediaStoreAlbumCoverUri(long albumId) {
