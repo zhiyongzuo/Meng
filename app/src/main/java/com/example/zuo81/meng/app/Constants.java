@@ -28,6 +28,11 @@ public class Constants {
     public static final String SHAREDPREFERENCES_FILTER_SIZE = "3252352DGGSSS342347347";
     public static final String SHAREDPREFERENCES_FILTER_TIME = "DFS3252352DGGSSS342347347";
     public static final String SHAREDPREFERENCES_CURRENT_SONG_ID = "DFDF3S3252352DGGSSS342347347";
+    public static final String SHAREDPREFERENCES_FIRST_CHOSED_FRAGMENT_ID = "DFDFSD3S32GGSGSGSGSDG52352DGGSSS342347347";
+    public static final int DICTIONARY_FRAGMENT = 0;
+    public static final int MUSIC_FRAGMENT = 1;
+    public static final int GALLERY_FRAGMENT = 2;
+
     public static final String DETAIL_FRAGMENT_PIC_POSITION = "34";
     public static final String DETAIL_FRAGMENT_PIC_URL = "33retg4";
     public static final String DETAIL_FRAGMENT_PIC_LIST = "6967";

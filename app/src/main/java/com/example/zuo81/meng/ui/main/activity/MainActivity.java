@@ -2,6 +2,7 @@ package com.example.zuo81.meng.ui.main.activity;
 
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.support.design.widget.NavigationView;
@@ -21,7 +22,9 @@ import com.example.zuo81.meng.ui.dictionary.DictionaryFragment;
 import com.example.zuo81.meng.ui.gallery.GalleryFragment;
 import com.example.zuo81.meng.ui.main.view.MainView;
 import com.example.zuo81.meng.ui.music.MusicMainFragment;
+import com.example.zuo81.meng.ui.setting.SettingFragment;
 import com.example.zuo81.meng.utils.FileUtils;
+import com.example.zuo81.meng.utils.SPUtils;
 import com.orhanobut.logger.Logger;
 import com.qiniu.android.common.AutoZone;
 import com.qiniu.android.http.ResponseInfo;
@@ -55,6 +58,9 @@ import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 
 import static com.example.zuo81.meng.app.Constants.BUCKET_NAME;
+import static com.example.zuo81.meng.app.Constants.DICTIONARY_FRAGMENT;
+import static com.example.zuo81.meng.app.Constants.GALLERY_FRAGMENT;
+import static com.example.zuo81.meng.app.Constants.MUSIC_FRAGMENT;
 import static com.example.zuo81.meng.app.Constants.TEST_DOMAIN;
 import static com.example.zuo81.meng.utils.FileUtils.restoreFromBackUp;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
@@ -81,8 +87,9 @@ public class MainActivity extends SupportActivity
         toolbar.setTitle("dictinoary");
         setSupportActionBar(toolbar);
 
+
         if(findFragment(DictionaryFragment.class) == null) {
-            loadRootFragment(R.id.fl_main_content, DictionaryFragment.newInstance());
+            loadRootFragment(R.id.fl_main_content, getFirstLoadFragment());
         }
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,6 +99,17 @@ public class MainActivity extends SupportActivity
 
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().findItem(R.id.nav_dictionary).setChecked(true);
+    }
+
+    private SupportFragment getFirstLoadFragment() {
+        int i = SPUtils.getFirstLoadFragment();
+        switch(i) {
+            case MUSIC_FRAGMENT:
+                return MusicMainFragment.newInstance();
+            case GALLERY_FRAGMENT:
+                return GalleryFragment.newInstance();
+        }
+        return DictionaryFragment.newInstance();
     }
 
     @Override
@@ -191,6 +209,15 @@ public class MainActivity extends SupportActivity
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+            SettingFragment mSettingFragment = findFragment(SettingFragment.class);
+            if(mSettingFragment == null) {
+                popTo(DictionaryFragment.class, false, new Runnable() {
+                    @Override
+                    public void run() {
+                        start(SettingFragment.newInstance());
+                    }
+                });
+            }
 
         } else if (id == R.id.nav_backup) {
             File backUpFile = new File(FileUtils.getExternalFileDir("BackUp"), key);

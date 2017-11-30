@@ -14,4 +14,6 @@ public interface OnPlayerEventListener {
     void status_pause();
 
     void showUI(LocalMusicBean bean);
+
+    void showSeekBarProgress(int progress);
 }

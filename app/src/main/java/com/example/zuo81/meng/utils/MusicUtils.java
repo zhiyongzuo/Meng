@@ -71,8 +71,8 @@ public class MusicUtils {
     public static List<LocalMusicBean> scanMusic(Context context) {
         List<LocalMusicBean> musicList = new ArrayList<>();
 
-        //long filterSize = ParseUtils.parseLong(Preferences.getFilterSize()) * 1024;
-        //long filterTime = ParseUtils.parseLong(Preferences.getFilterTime()) * 1000;
+        //long filterSize = ParseUtils.parseLong(SPUtils.getFilterSize()) * 1024;
+        //long filterTime = ParseUtils.parseLong(SPUtils.getFilterTime()) * 1000;
 
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -153,7 +153,7 @@ public class MusicUtils {
                         MediaStore.Audio.AudioColumns.DISPLAY_NAME,
                         MediaStore.Audio.AudioColumns.SIZE,
                         MediaStore.Audio.AudioColumns.DURATION
-                }, BaseColumns._ID,
+                }, BaseColumns._ID + "= ?",
                 new String[]{String.valueOf(id)},
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
         if(cursor == null) {

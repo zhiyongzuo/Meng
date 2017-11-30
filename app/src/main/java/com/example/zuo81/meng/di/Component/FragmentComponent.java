@@ -6,6 +6,7 @@ import com.example.zuo81.meng.ui.gallery.GalleryFragment;
 import com.example.zuo81.meng.ui.music.MusicMainFragment;
 import com.example.zuo81.meng.ui.music.fragment.LocalMusicFragment;
 import com.example.zuo81.meng.ui.music.fragment.SearchMusicFragment;
+import com.example.zuo81.meng.ui.setting.SettingFragment;
 
 import dagger.Component;
 
@@ -25,4 +26,6 @@ public interface FragmentComponent {
     void inject(SearchMusicFragment fragment);
 
     void inject(MusicMainFragment fragment);
+
+    void inject(SettingFragment fragment);
 }

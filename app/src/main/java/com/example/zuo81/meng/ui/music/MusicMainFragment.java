@@ -1,18 +1,12 @@
 package com.example.zuo81.meng.ui.music;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Handler;
-import android.os.IBinder;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
@@ -25,10 +19,7 @@ import com.example.zuo81.meng.ui.music.adapter.MyFragmentPagerAdapter;
 import com.example.zuo81.meng.ui.music.fragment.LocalMusicFragment;
 import com.example.zuo81.meng.ui.music.fragment.SearchMusicFragment;
 import com.example.zuo81.meng.utils.MusicUtils;
-import com.orhanobut.logger.Logger;
-import com.xyzlf.share.library.bean.ShareEntity;
-import com.xyzlf.share.library.interfaces.ShareConstant;
-import com.xyzlf.share.library.util.ShareUtil;
+import com.example.zuo81.meng.utils.SPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +46,8 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
     TextView tvSongAuthor;
     @BindView(R.id.iv_play_bar_lrc_view)
     LrcView lrcView;
-    @BindView(R.id.pb_play_bar)
-    ProgressBar pbPlayBar;
+    @BindView(R.id.sb_play_bar)
+    SeekBar sbPlayBar;
     @BindView(R.id.iv_play_bar_play)
     ImageView ivPlay;
     @BindView(R.id.iv_play_bar_next)
@@ -64,9 +55,8 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
     @BindView(R.id.iv_play_bar_pre)
     ImageView ivPre;
     private List<Fragment> list;
-    private PlayServiceConnection mPlayServiceConnection;
-
-    private Handler handler = new Handler();
+    private LocalMusicBean bean;
+    private PlayService playService;
 
     public static MusicMainFragment newInstance() {
         return new MusicMainFragment();
@@ -79,13 +69,8 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
 
     @Override
     protected void initEventAndData() {
-        startService();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                bindService();
-            }
-        }, 1000);
+        playService = MusicUtils.getPlayService();
+        playService.setOnPlayerEventListener(this);
         list = new ArrayList<>();
         list.add(new LocalMusicFragment());
         list.add(new SearchMusicFragment());
@@ -93,6 +78,7 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
         ivPlay.setOnClickListener(this);
         ivNext.setOnClickListener(this);
         ivAlbumPic.setOnClickListener(this);
+        lrcView.setVisibility(View.GONE);
 
         MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getChildFragmentManager(), list);
         mViewPager.setAdapter(adapter);
@@ -102,6 +88,12 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.getTabAt(0).setText("本地");
         mTabLayout.getTabAt(1).setText("在线");
+
+        long id = SPUtils.getCurrentSongId();
+        bean = MusicUtils.queryFromId(id);
+        if (bean != null) {
+            showUI(bean);
+        }
     }
 
     @Override
@@ -110,10 +102,10 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
             case R.id.play_bar:
                 break;
             case R.id.iv_play_bar_album_pic:
-                MusicUtils.getPlayService().share(getActivity());
+                playService.share(getActivity());
                 break;
             case R.id.iv_play_bar_play:
-                MusicUtils.getPlayService().play();
+                playService.buttonPlayClick(getActivity());
                 break;
             case R.id.iv_play_bar_pre:
                 break;
@@ -124,45 +116,38 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
         }
     }
 
-    private void startService() {
-        Intent intent = new Intent(getActivity(), PlayService.class);
-        activity.startService(intent);
-    }
-
-    private void bindService() {
-        Intent intent = new Intent();
-        intent.setClass(context, PlayService.class);
-        mPlayServiceConnection = new PlayServiceConnection();
-        context.bindService(intent, mPlayServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    private class PlayServiceConnection implements ServiceConnection {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            PlayService playService = ((PlayService.PlayBinder)iBinder).getService();
-            MusicUtils.setPlayService(playService);
-            playService.setOnPlayerEventListener(MusicMainFragment.this);
+    @Override
+    public void showUI(LocalMusicBean bean) {
+        if(bean == null) {
+            return;
         }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
+        sbPlayBar.setMax((int)bean.getDuration());
+        sbPlayBar.setProgress(0);
+        sbPlayBar.setPadding(0, 0, 0, 0);
+        GlideApp.with(context).load(bean.getCoverPath()).into(ivAlbumPic);
+        tvSongName.setText(bean.getTitle());
+        if (!lrcView.hasLrc()) {
+            tvSongAuthor.setVisibility(View.VISIBLE);
+            lrcView.setVisibility(View.GONE);
+            tvSongAuthor.setText(bean.getArtist() + " - " + bean.getAlbum());
+        } else {
+            //有歌词并且非播放中
+            tvSongAuthor.setVisibility(View.GONE);
+            lrcView.setVisibility(View.VISIBLE);
+            //lrcView.loadLrc(bean.)
         }
     }
 
     @Override
-    public void showUI(LocalMusicBean bean) {
-        //lrcView.loadLrc(bean.)
-        GlideApp.with(context).load(bean.getCoverPath()).into(ivAlbumPic);
-        tvSongName.setText(bean.getTitle());
-        tvSongAuthor.setText(bean.getArtist() + " - " + bean.getAlbum());
-        pbPlayBar.setMax((int)bean.getDuration());
-        pbPlayBar.setProgress((int)MusicUtils.getPlayService().getCurrentPosition());
+    public void showSeekBarProgress(int progress) {
+        sbPlayBar.setProgress(progress);
     }
 
     public void showPlayHistory() {
 
     }
+
+
 
 
     @Override
