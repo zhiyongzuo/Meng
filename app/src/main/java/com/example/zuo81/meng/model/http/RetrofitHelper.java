@@ -6,7 +6,7 @@ import com.example.zuo81.meng.model.bean.music.BaiDuMusicSearchBean;
 import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.model.http.api.BaiDuApis;
 import com.example.zuo81.meng.model.http.api.ShanBeiApis;
-import com.example.zuo81.meng.model.http.api.WelcomeApis;
+import com.example.zuo81.meng.model.http.api.SplashApis;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;
@@ -27,10 +27,10 @@ public class RetrofitHelper implements HttpHelper {
 
     private ShanBeiApis mShanBeiApis;
     private BaiDuApis mBaiDuApis;
-    private WelcomeApis mWelcomeApis;
+    private SplashApis mWelcomeApis;
 
     @Inject
-    public RetrofitHelper(ShanBeiApis shanBeiApis, BaiDuApis baiDuApis, WelcomeApis welcomeApis) {
+    public RetrofitHelper(ShanBeiApis shanBeiApis, BaiDuApis baiDuApis, SplashApis welcomeApis) {
         mShanBeiApis = shanBeiApis;
         mBaiDuApis = baiDuApis;
         mWelcomeApis = welcomeApis;

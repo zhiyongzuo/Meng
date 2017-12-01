@@ -39,13 +39,14 @@ public class SearchMusicPresenter extends RxBasePresenter<SearchMusic.View> impl
     }
 
     public void registerEvent() {
+        Logger.d("search music register");
         addToCompositeDisposable(RXBus.getInstance().toFlowable(SearchEvent.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Predicate<SearchEvent>(){
                     @Override
                     public boolean test(SearchEvent searchEvent) throws Exception {
-                        return searchEvent.getType() == Constants.TYPE_SEARCH_MUSIC;
+                        return searchEvent.getType() == Constants.SEARCH_TYPE_PLAYED_MUSIC;
                     }
                 })
                 .map(new Function<SearchEvent, String>() {
@@ -58,16 +59,17 @@ public class SearchMusicPresenter extends RxBasePresenter<SearchMusic.View> impl
                     @Override
                     public void onNext(String s) {
                         getMusic(s);
+                        Logger.d(s);
                     }
 
                     @Override
                     public void onError(Throwable t) {
-
+                        Logger.d("onError");
                     }
 
                     @Override
                     public void onComplete() {
-
+                        Logger.d("onComplete");
                     }
                 }));
     }

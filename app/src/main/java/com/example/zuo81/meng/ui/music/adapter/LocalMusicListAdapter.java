@@ -12,12 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
-import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
-import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.utils.MusicUtils;
-
-import static com.example.zuo81.meng.app.Constants.TYPE_PLAY_MUSIC;
 
 /**
  * Created by zuo81 on 2017/11/24.
@@ -51,7 +47,7 @@ public class LocalMusicListAdapter extends RecyclerView.Adapter<LocalMusicListAd
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), TYPE_PLAY_MUSIC));
+                //RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), SEARCH_TYPE_PLAY_MUSIC));
                 MusicUtils.getPlayService().showUI(songListBean);
                 MusicUtils.getPlayService().playMusic(songListBean);
             }

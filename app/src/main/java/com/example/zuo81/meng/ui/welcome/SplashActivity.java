@@ -6,9 +6,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -17,18 +14,14 @@ import android.widget.TextView;
 
 import com.example.zuo81.meng.R;
 import com.example.zuo81.meng.base.MVPBaseActivity;
-import com.example.zuo81.meng.base.contract.welcome.Welcome;
+import com.example.zuo81.meng.base.contract.splash.Splash;
 import com.example.zuo81.meng.component.PlayService;
-import com.example.zuo81.meng.presenter.welcome.WelcomePresenterImp;
+import com.example.zuo81.meng.presenter.welcome.SplashPresenterImp;
 import com.example.zuo81.meng.ui.main.activity.MainActivity;
-import com.example.zuo81.meng.ui.music.MusicMainFragment;
 import com.example.zuo81.meng.utils.BitmapCache;
-import com.example.zuo81.meng.utils.FileUtils;
 import com.example.zuo81.meng.utils.MusicUtils;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
-
-import java.io.File;
 
 import butterknife.BindView;
 import okhttp3.ResponseBody;
@@ -49,7 +42,7 @@ import static java.lang.Thread.sleep;
 
 
 @RuntimePermissions
-public class SplashActivity extends MVPBaseActivity<WelcomePresenterImp> implements Welcome.View{
+public class SplashActivity extends MVPBaseActivity<SplashPresenterImp> implements Splash.View{
     @BindView(R.id.iv_welcome_bg)
     ImageView ivWelcomeBg;
     @BindView(R.id.tv_welcome_author)
@@ -97,7 +90,7 @@ public class SplashActivity extends MVPBaseActivity<WelcomePresenterImp> impleme
     public void savePic(ResponseBody body) {
         Logger.d("savepic");
         writeInputStreamToDisk(body.byteStream(), APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH);
-        BitmapCache.getInstance().saveBitmapCacheFromFile(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH);
+        //BitmapCache.getInstance().saveBitmapCacheFromFile(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH);
         jumpToMain();
     }
 

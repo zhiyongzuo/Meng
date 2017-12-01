@@ -8,21 +8,15 @@ import com.example.zuo81.meng.model.bean.WelcomeBean;
  * Created by zuo81 on 2017/10/24.
  */
 
-public interface WelcomeContract {
+public interface MainContract {
 
     interface View extends BaseView {
-
-        void showPic(WelcomeBean welcomeBean);
-
-        void showAuthor(String authorStr);
-
-        void jumpToMain();
+        void toastSuccess(String string);
     }
 
 
-
     interface Presenter extends BasePresenter<View> {
-
-        void getWelcomeData();
+        void backupRealmDB();
+        void restoreRealmDB();
     }
 }

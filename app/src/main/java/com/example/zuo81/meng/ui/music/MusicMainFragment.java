@@ -13,19 +13,25 @@ import com.example.zuo81.meng.R;
 import com.example.zuo81.meng.app.GlideApp;
 import com.example.zuo81.meng.base.NoMVPBaseFragment;
 import com.example.zuo81.meng.component.PlayService;
+import com.example.zuo81.meng.component.RXBus;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
+import com.example.zuo81.meng.model.event.SearchEvent;
 import com.example.zuo81.meng.service.OnPlayerEventListener;
 import com.example.zuo81.meng.ui.music.adapter.MyFragmentPagerAdapter;
 import com.example.zuo81.meng.ui.music.fragment.LocalMusicFragment;
 import com.example.zuo81.meng.ui.music.fragment.SearchMusicFragment;
 import com.example.zuo81.meng.utils.MusicUtils;
 import com.example.zuo81.meng.utils.SPUtils;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import me.wcy.lrcview.LrcView;
+
+import static com.example.zuo81.meng.app.Constants.SEARCH_TYPE_LOCALE_MUSIC;
+import static com.example.zuo81.meng.app.Constants.SEARCH_TYPE_PLAYED_MUSIC;
 
 /**
  * Created by zuo81 on 2017/11/1.
@@ -143,12 +149,17 @@ public class MusicMainFragment extends NoMVPBaseFragment implements View.OnClick
         sbPlayBar.setProgress(progress);
     }
 
-    public void showPlayHistory() {
-
+    public void doSearch(String query) {
+        switch(mViewPager.getCurrentItem()) {
+            case SEARCH_TYPE_LOCALE_MUSIC:
+                RXBus.getInstance().post(new SearchEvent(query, SEARCH_TYPE_LOCALE_MUSIC));
+                break;
+            case SEARCH_TYPE_PLAYED_MUSIC:
+                Logger.d("doSearch");
+                RXBus.getInstance().post(new SearchEvent(query, SEARCH_TYPE_PLAYED_MUSIC));
+                break;
+        }
     }
-
-
-
 
     @Override
     public void status_play() {

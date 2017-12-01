@@ -54,7 +54,7 @@ public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> im
                 .filter(new Predicate<SearchEvent>() {
                     @Override
                     public boolean test(SearchEvent searchEvent) throws Exception {
-                        return searchEvent.getType() == Constants.TYPE_DICTIONARY;
+                        return searchEvent.getType() == Constants.SEARCH_TYPE_DICTIONARY;
                     }
                 })
                 .map(new Function<SearchEvent, String>() {

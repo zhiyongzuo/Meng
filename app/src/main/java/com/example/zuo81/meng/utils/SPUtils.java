@@ -44,7 +44,7 @@ public class SPUtils {
         SPUtils.getInstance().sp.edit().putInt(SHAREDPREFERENCES_FIRST_CHOSED_FRAGMENT_ID, i).apply();
     }
 
-    public static int getFirstLoadFragment() {
+    public static int getFirstLoadFragmentItemNumber() {
         return SPUtils.getInstance().sp.getInt(SHAREDPREFERENCES_FIRST_CHOSED_FRAGMENT_ID, DICTIONARY_FRAGMENT);
     }
 }

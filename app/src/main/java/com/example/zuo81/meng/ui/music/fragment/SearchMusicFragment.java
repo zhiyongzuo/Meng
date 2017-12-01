@@ -27,7 +27,7 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
     RecyclerView rvSearchMusic;
 
     private OnlineMusicListAdapter adapter;
-    private List<BaiDuMusicSearchBean> list;
+    private List<BaiDuMusicSearchBean> list = new ArrayList<>() ;
 
     @Override
     protected int getLayoutId() {
@@ -41,7 +41,6 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
 
     @Override
     protected void initEventAndData() {
-        list = new ArrayList<>();
         adapter = new OnlineMusicListAdapter(getContext(), list);
         adapter.setOnDeleteClickListener(new OnlineMusicListAdapter.OnDetailClickListener() {
             @Override

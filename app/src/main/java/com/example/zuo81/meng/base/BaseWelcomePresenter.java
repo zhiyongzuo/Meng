@@ -1,7 +1,5 @@
 package com.example.zuo81.meng.base;
 
-import com.example.zuo81.meng.base.contract.main.WelcomeContract;
-
 /**
  * Created by zuo81 on 2017/10/24.
  */

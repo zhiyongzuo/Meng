@@ -17,7 +17,7 @@ import com.example.zuo81.meng.model.event.SearchEvent;
 
 import java.util.List;
 
-import static com.example.zuo81.meng.app.Constants.TYPE_PLAY_MUSIC;
+import static com.example.zuo81.meng.app.Constants.SEARCH_TYPE_PLAY_MUSIC;
 
 /**
  * Created by zuo81 on 2017/11/3.
@@ -53,7 +53,7 @@ public class OnlineMusicListAdapter extends RecyclerView.Adapter<OnlineMusicList
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), TYPE_PLAY_MUSIC));
+                RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), SEARCH_TYPE_PLAY_MUSIC));
             }
         });
         holder.iv_detail.setOnClickListener(new View.OnClickListener() {

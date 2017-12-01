@@ -7,15 +7,22 @@ import com.example.zuo81.meng.R;
 import java.io.File;
 import java.nio.charset.Charset;
 
+import io.realm.Realm;
+
 /**
  * Created by zuo81 on 2017/10/23.
  */
 
 public class Constants {
     public static final String MAP = "MAP";
-    public static final int TYPE_DICTIONARY = 106;
-    public static final int TYPE_SEARCH_MUSIC = 16;
-    public static final int TYPE_PLAY_MUSIC = 4646;
+    public static final int SEARCH_TYPE_DICTIONARY = 106;
+    public static final int SEARCH_TYPE_MAIN_MUSIC = 16;
+    public static final int SEARCH_TYPE_GALLERY = 416;
+    public static final int SEARCH_TYPE_LOCALE_MUSIC = 0;
+    public static final int SEARCH_TYPE_PLAYED_MUSIC = 1;
+    public static final int SEARCH_TYPE_PLAY_MUSIC = 4646;
+    public static final String AppID = "wxaa680ac384dde5a0";
+    public static final String AppSecret = "d0eb138e6d0fb487029220df921ce8b5";
     public static final String ak = "ih2IN0jLOsBO8gT2hHcuYg6FWF51MX0_JSh2nNYX";
     public static final String sk = "8p-guROmUJVH5PaPm2CNU4Q5JQZeJ6I0C7Kfi3Kf";
     public static final String BUCKET_NAME = "alwaysblue";
@@ -48,5 +55,9 @@ public class Constants {
     public static final String EXTRA_NAME_DETAIL_PIC_ACTIVITY = "FLJLW4TJ4523";
 
     public static final String APP_DIRECTORY = Environment.getExternalStorageDirectory() +File.separator + App.getInstance().getApplicationContext().getString(R.string.app_name) + File.separator;
+
+
+    public static final String KEY_REALM_DB_NAME = "default.realm";
+    public static final String DB_PATH = Realm.getDefaultInstance().getPath();
 
 }

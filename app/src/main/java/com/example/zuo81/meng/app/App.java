@@ -3,8 +3,11 @@ package com.example.zuo81.meng.app;
 import android.app.Activity;
 import android.app.Application;
 
+import com.bilibili.socialize.share.core.BiliShare;
+import com.bilibili.socialize.share.core.BiliShareConfiguration;
 import com.example.zuo81.meng.di.Component.AppComponent;
-import com.example.zuo81.meng.di.Component.DaggerAppComponent;
+import com.example.zuo81.meng.di.Component
+        .DaggerAppComponent;
 import com.example.zuo81.meng.di.module.AppModule;
 import com.example.zuo81.meng.di.module.HttpModule;
 import com.facebook.stetho.Stetho;
@@ -24,6 +27,8 @@ public class App extends Application {
     private static App instance;
     private Set<Activity> allActivities;
     private static AppComponent appComponent;
+    private static BiliShareConfiguration configuration;
+    private static BiliShare biliShare;
 
     public static synchronized App getInstance() {
         return instance;
@@ -41,6 +46,7 @@ public class App extends Application {
                         .build());
 
         instance = this;
+
     }
 
     public void addActivity(Activity activity) {
@@ -75,6 +81,22 @@ public class App extends Application {
                     .build();
         }
         return appComponent;
+    }
+
+    private static BiliShareConfiguration getConfiguration() {
+        if(configuration == null) {
+            configuration = new BiliShareConfiguration.Builder(instance)
+                    .weixin("wxaa680ac384dde5a0") //配置微信
+                    //.imageDownloader(new ShareFrescoImageDownloader()) //图片下载器
+                    .build();
+        }
+        return configuration;
+    }
+
+    public static BiliShare getBiliShare() {
+        biliShare = BiliShare.global();
+        biliShare.config(getConfiguration());
+        return biliShare;
     }
 
 }

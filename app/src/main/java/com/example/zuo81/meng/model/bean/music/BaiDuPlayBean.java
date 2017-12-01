@@ -6,7 +6,7 @@ package com.example.zuo81.meng.model.bean.music;
 
 public class BaiDuPlayBean {
 
-    //http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.song.play&songid=31197196
+    //http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.song.play&songid=816477
 
     /**
      * songinfo : {"special_type":0,"pic_huge":"","ting_uid":"7994","pic_premium":"http://musicdata.baidu.com/data2/pic/67b5d358bcc58bc627da744b91a77238/72257/72257.jpg@s_1,w_500,h_500","havehigh":2,"si_proxycompany":"深圳腾讯计算机系统有限公司杰威尔","author":"周杰伦","toneid":"600902000006889364","has_mv":1,"song_id":"816477","title":"晴天","artist_id":"29","lrclink":"http://musicdata.baidu.com/data2/lrc/e7a17c99714ff4c8ecdf18e40dcdeef0/544621041/544621041.lrc","relate_status":"0","learn":1,"pic_big":"http://musicdata.baidu.com/data2/pic/67b5d358bcc58bc627da744b91a77238/72257/72257.jpg@s_1,w_150,h_150","play_type":0,"album_id":"72257","pic_radio":"http://musicdata.baidu.com/data2/pic/67b5d358bcc58bc627da744b91a77238/72257/72257.jpg@s_1,w_300,h_300","bitrate_fee":"{\"0\":\"129|-1\",\"1\":\"-1|-1\"}","song_source":"web","all_artist_id":"29","all_artist_ting_uid":"7994","piao_id":"0","charge":0,"copy_type":"0","all_rate":"24,64,128,192,256,320,flac","korean_bb_song":"0","is_first_publish":0,"has_mv_mobile":0,"album_title":"叶惠美","pic_small":"http://musicdata.baidu.com/data2/pic/67b5d358bcc58bc627da744b91a77238/72257/72257.jpg@s_1,w_90,h_90","album_no":"3","resource_type_ext":"0","resource_type":"0"}

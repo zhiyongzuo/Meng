@@ -12,7 +12,7 @@ import retrofit2.http.Url;
  * Created by zuo81 on 2017/10/26.
  */
 
-public interface WelcomeApis {
+public interface SplashApis {
     //http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN
     String HOST = "http://www.bing.com/";
 

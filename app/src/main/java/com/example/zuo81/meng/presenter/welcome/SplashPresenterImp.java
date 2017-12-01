@@ -1,21 +1,11 @@
 package com.example.zuo81.meng.presenter.welcome;
 
-import android.text.TextUtils;
-
-import com.example.zuo81.meng.base.contract.welcome.Welcome;
+import com.example.zuo81.meng.base.contract.splash.Splash;
 import com.example.zuo81.meng.base.presenter.RxBasePresenter;
 import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.WelcomeBean;
-import com.example.zuo81.meng.model.http.api.WelcomeApis;
 import com.example.zuo81.meng.utils.FileUtils;
 import com.orhanobut.logger.Logger;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -25,7 +15,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import retrofit2.Response;
 
 import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
 import static com.example.zuo81.meng.app.Constants.SPLASH;
@@ -35,12 +24,12 @@ import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
  * Created by zuo81 on 2017/10/25.
  */
 
-public class WelcomePresenterImp extends RxBasePresenter<Welcome.View> implements Welcome.Presenter{
+public class SplashPresenterImp extends RxBasePresenter<Splash.View> implements Splash.Presenter{
     private DataManager mDataManager;
     public boolean save;
 
     @Inject
-    public WelcomePresenterImp(DataManager mDataManager) {
+    public SplashPresenterImp(DataManager mDataManager) {
         this.mDataManager = mDataManager;
     }
 

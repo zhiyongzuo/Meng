@@ -53,7 +53,7 @@ public final class Auth {
 
     public static Auth create(String accessKey, String secretKey) {
         if (StringUtils.isNullOrEmpty(accessKey) || StringUtils.isNullOrEmpty(secretKey)) {
-            throw new IllegalArgumentException("empty key");
+            throw new IllegalArgumentException("empty KEY_REALM_DB_NAME");
         }
         byte[] sk = StringUtils.utf8Bytes(secretKey);
         SecretKeySpec secretKeySpec = new SecretKeySpec(sk, "HmacSHA1");
@@ -208,11 +208,11 @@ public final class Auth {
     }
 
     /**
-     * scope = bucket:key
+     * scope = bucket:KEY_REALM_DB_NAME
      * 同名文件覆盖操作、只能上传指定key的文件可以可通过此方法获取token
      *
      * @param bucket 空间名
-     * @param key    key，可为 null
+     * @param key    KEY_REALM_DB_NAME，可为 null
      * @return 生成的上传token
      */
     public String uploadToken(String bucket, String key) {
@@ -223,7 +223,7 @@ public final class Auth {
      * 生成上传token
      *
      * @param bucket  空间名
-     * @param key     key，可为 null
+     * @param key     KEY_REALM_DB_NAME，可为 null
      * @param expires 有效时长，单位秒
      * @param policy  上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
      *                scope通过 bucket、key间接设置，deadline 通过 expires 间接设置
@@ -237,7 +237,7 @@ public final class Auth {
      * 生成上传token
      *
      * @param bucket  空间名
-     * @param key     key，可为 null
+     * @param key     KEY_REALM_DB_NAME，可为 null
      * @param expires 有效时长，单位秒。默认3600s
      * @param policy  上传策略的其它参数，如 new StringMap().put("endUser", "uid").putNotEmpty("returnBody", "")。
      *                scope通过 bucket、key间接设置，deadline 通过 expires 间接设置

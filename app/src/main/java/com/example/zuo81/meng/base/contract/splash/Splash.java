@@ -1,8 +1,7 @@
-package com.example.zuo81.meng.base.contract.welcome;
+package com.example.zuo81.meng.base.contract.splash;
 
 import com.example.zuo81.meng.base.BasePresenter;
 import com.example.zuo81.meng.base.BaseView;
-import com.example.zuo81.meng.model.bean.WelcomeBean;
 
 import okhttp3.ResponseBody;
 
@@ -10,7 +9,7 @@ import okhttp3.ResponseBody;
  * Created by zuo81 on 2017/11/18.
  */
 
-public interface Welcome {
+public interface Splash {
 
     interface View extends BaseView {
         void savePic(ResponseBody body);

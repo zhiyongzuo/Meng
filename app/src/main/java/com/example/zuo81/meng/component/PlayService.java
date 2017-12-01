@@ -3,24 +3,41 @@ package com.example.zuo81.meng.component;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.bilibili.socialize.share.core.BiliShare;
+import com.bilibili.socialize.share.core.SocializeListeners;
+import com.bilibili.socialize.share.core.SocializeMedia;
+import com.bilibili.socialize.share.core.shareparam.BaseShareParam;
+import com.bilibili.socialize.share.core.shareparam.ShareAudio;
+import com.bilibili.socialize.share.core.shareparam.ShareImage;
+import com.bilibili.socialize.share.core.shareparam.ShareParamAudio;
+import com.example.zuo81.meng.app.App;
+import com.example.zuo81.meng.app.Constants;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
 import com.example.zuo81.meng.service.OnPlayerEventListener;
+import com.example.zuo81.meng.utils.BitmapCache;
 import com.example.zuo81.meng.utils.MusicUtils;
 import com.example.zuo81.meng.utils.SPUtils;
 import com.orhanobut.logger.Logger;
-import com.xyzlf.share.library.bean.ShareEntity;
-import com.xyzlf.share.library.interfaces.ShareConstant;
-import com.xyzlf.share.library.util.ShareUtil;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.zuo81.meng.app.App.getBiliShare;
+import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
+import static com.example.zuo81.meng.app.Constants.SPLASH;
+import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
 
 public class PlayService extends Service implements MediaPlayer.OnCompletionListener {
     private static boolean isPlaying;
@@ -45,8 +62,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
-        //mDataManager.setCurrentSongId(1244555);
-        //Logger.d(mDataManager.getCurrentSongId());
+        mPlayer.setOnCompletionListener(this);
     }
 
     @Override
@@ -139,22 +155,43 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         LocalMusicBean bean = MusicUtils.queryFromId(id);
         if (bean!=null) {
             //todo qiniu
+            updateMusicToQiniu();
             shareToWX(activity, bean);
         } else {
             Logger.d("null");
         }
     }
 
+    private void updateMusicToQiniu(){}
+
     private void shareToWX(Activity activity, LocalMusicBean bean) {
-        ShareEntity testBean = new ShareEntity(bean.getTitle(), bean.getArtist());
-        testBean.setUrl(bean.getPath()); //分享链接
-        testBean.setImgUrl(bean.getCoverPath());
-        ShareUtil.startShare(activity, ShareConstant.SHARE_CHANNEL_WEIXIN_CIRCLE, testBean, ShareConstant.REQUEST_CODE);
+        BaseShareParam param = new ShareParamAudio(bean.getTitle(), bean.getArtist(), "http://www.bilibili.com/video/av3521416");
+        ShareParamAudio paramAudio = (ShareParamAudio)param;
+        ShareAudio audio = new ShareAudio(new ShareImage("http://i2.hdslb.com/320_200/video/85/85ae2b17b223a0cd649a49c38c32dd10.jpg"), "http://www.bilibili.com/video/av3521416", "哔哩哔哩2016拜年祭");
+        paramAudio.setAudio(audio);
+        getBiliShare().share(activity, SocializeMedia.WEIXIN_MONMENT, paramAudio, shareListener);
+    }
+
+    protected SocializeListeners.ShareListener shareListener = new SocializeListeners.ShareListenerAdapter() {
+
+        @Override
+        public void onStart(SocializeMedia type) {
+            Logger.d("onstart");
+        }
+
+        @Override
+        protected void onComplete(SocializeMedia type, int code, Throwable error) {
+            Logger.d("oncomplete");
+        }
+    };
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-
+        pause();
     }
 
     private Runnable runnable = new Runnable() {
