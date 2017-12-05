@@ -53,7 +53,7 @@ public class RetrofitHelper implements HttpHelper {
     }
 
     public Flowable<List<BaiDuMusicSearchBean>> searchMusicListInfo(String s) {
-        return mBaiDuApis.fetchMusicListInfo(Method_search, s, "10", "json");
+        return mBaiDuApis.fetchMusicListInfo(Method_search, s);
     }
 
     public Flowable<BaiDuPlayBean> playMusicLink(String songId) {

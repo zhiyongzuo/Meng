@@ -47,20 +47,20 @@ public class OnlineMusicListAdapter extends RecyclerView.Adapter<OnlineMusicList
 
     @Override
     public void onBindViewHolder(SearchViewHolder holder, int position) {
-        final BaiDuMusicSearchBean.SongListBean songListBean = mList.get(position).getSong_list().get(0);
-        holder.tvSongName.setText(songListBean.getTitle());
-        holder.tvAuthorAlbum.setText(songListBean.getAuthor() + " - " + songListBean.getAlbum_title());
+        final BaiDuMusicSearchBean.SongBean songListBean = mList.get(position).getSong().get(0);
+        holder.tvSongName.setText(songListBean.getSongname());
+        holder.tvAuthorAlbum.setText(songListBean.getArtistname() + " - " + mList.get(position).getAlbum().get(0).getAlbumname());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), SEARCH_TYPE_PLAY_MUSIC));
+                RXBus.getInstance().post(new SearchEvent(songListBean.getSongid(), SEARCH_TYPE_PLAY_MUSIC));
             }
         });
         holder.iv_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context)
-                        .setTitle(songListBean.getTitle())
+                        .setTitle(songListBean.getSongname())
                         .setItems(R.array.search_music_dialog, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

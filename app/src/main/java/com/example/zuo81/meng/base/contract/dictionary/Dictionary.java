@@ -15,14 +15,14 @@ public interface Dictionary {
 
     interface View extends BaseView {
 
-        void updateList(ShanBeiBean bean);
+        void addItem(ShanBeiBean bean);
     }
 
     interface Presenter extends BasePresenter<View> {
 
         List<RealmDictionaryBean> getAllRealmDictionary();
 
-        void addToRealmDictionary(String english, String chinese);
+        RealmDictionaryBean addToRealmDictionary(String english, String chinese);
 
     }
 }

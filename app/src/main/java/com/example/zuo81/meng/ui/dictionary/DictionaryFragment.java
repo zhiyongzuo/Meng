@@ -32,10 +32,10 @@ public class DictionaryFragment extends MVPBaseFragment<DictionaryPresenterImpl>
     @BindView(R.id.tv_dictionary)
     TextView tvDictionary;
 
-    private boolean RV_INITED;
     private DictionaryAdapter mDictionaryAdapter;
     private List<RealmDictionaryBean> mList = new ArrayList<>();
     private DefaultItemTouchHelpCallback mCallback;
+    LinearLayoutManager mLinearLayoutManager;
 
     public static DictionaryFragment newInstance() {
         return new DictionaryFragment();
@@ -83,33 +83,22 @@ public class DictionaryFragment extends MVPBaseFragment<DictionaryPresenterImpl>
     }
 
     private void init() {
-        //Logger.d("init");
         mDictionaryAdapter = new DictionaryAdapter(getContext(), mList);
-        LinearLayoutManager linearLayout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
-        linearLayout.setStackFromEnd(true);
-        rvDictionary.setLayoutManager(linearLayout);
+        mLinearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, true);
+        mLinearLayoutManager.setStackFromEnd(true);
+        rvDictionary.setLayoutManager(mLinearLayoutManager);
         rvDictionary.setAdapter(mDictionaryAdapter);
-        RV_INITED = true;
     }
 
     @Override
-    public void updateList(ShanBeiBean bean) {
+    public void addItem(ShanBeiBean bean) {
         if (bean.getData().getDefinition() != null) {
-
+            tvDictionary.setVisibility(View.GONE);
             Toast.makeText(getContext(), bean.getData().getDefinition(), Toast.LENGTH_SHORT).show();
-
-            presenter.addToRealmDictionary(bean.getData().getContent(), bean.getData().getDefinition());
-
-            mList = presenter.getAllRealmDictionary();
-            mDictionaryAdapter = new DictionaryAdapter(getContext(), mList);
-            rvDictionary.setAdapter(mDictionaryAdapter);
-
-            if(RV_INITED) {
-                mDictionaryAdapter.notifyDataSetChanged();
-            } else{
-                tvDictionary.setVisibility(View.GONE);
-                init();
-            }
+            RealmDictionaryBean b = presenter.addToRealmDictionary(bean.getData().getContent(), bean.getData().getDefinition());
+            mList.add(b);
+            mDictionaryAdapter.notifyDataSetChanged();
+            mLinearLayoutManager.scrollToPositionWithOffset(mList.size() - 1, 0);
         } else {
             Toast.makeText(getContext(), "没有查询到", Toast.LENGTH_SHORT).show();
         }

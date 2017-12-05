@@ -1,5 +1,6 @@
 package com.example.zuo81.meng.di.module;
 
+import com.example.zuo81.meng.app.App;
 import com.example.zuo81.meng.app.Constants;
 import com.example.zuo81.meng.di.qualifier.QualifierBaidu;
 import com.example.zuo81.meng.di.qualifier.QualifierShanbei;
@@ -7,7 +8,6 @@ import com.example.zuo81.meng.di.qualifier.QualifierWelcome;
 import com.example.zuo81.meng.model.http.api.BaiDuApis;
 import com.example.zuo81.meng.model.http.api.ShanBeiApis;
 import com.example.zuo81.meng.model.http.api.SplashApis;
-import com.example.zuo81.meng.utils.SystemUtil;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.File;
@@ -28,6 +28,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.zuo81.meng.model.http.api.ShanBeiApis.Host;
+import static com.example.zuo81.meng.utils.NetworkUtils.checkNetworkConnect;
 
 /**
  * Created by zuo81 on 2017/11/17.
@@ -40,7 +41,7 @@ public class HttpModule {
     @Singleton
     @Provides
     Retrofit provideShanBeiRetrofit(Retrofit.Builder builder, OkHttpClient client) {
-        return createRetrofit(builder, client, Host);
+        return createRetrofit(builder, client, ShanBeiApis.Host);
     }
 
     @QualifierBaidu
@@ -101,13 +102,13 @@ public class HttpModule {
             @Override
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
-                if (!SystemUtil.isNetworkConnected()) {
+                if (!checkNetworkConnect(App.getInstance())) {
                     request = request.newBuilder()
                             .cacheControl(CacheControl.FORCE_CACHE)
                             .build();
                 }
                 Response response = chain.proceed(request);
-                if (SystemUtil.isNetworkConnected()) {
+                if (checkNetworkConnect(App.getInstance())) {
                     int maxAge = 0;
                     // 有网络时, 不缓存, 最大保存时长为0
                     response.newBuilder()

@@ -13,8 +13,8 @@ import retrofit2.http.Query;
 public interface ShanBeiApis {
 
     //https://api.shanbay.com/bdc/search/?word={word}
-    String Host = "https://api.shanbay.com/bdc/";
+    String Host = "https://api.shanbay.com/";
 
-    @GET("search/")
+    @GET("bdc/search/")
     Flowable<ShanBeiBean> getDictionaryInfo(@Query("word") String word);
 }

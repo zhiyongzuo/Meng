@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -37,7 +38,8 @@ import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
 import static com.example.zuo81.meng.app.Constants.SPLASH;
 import static com.example.zuo81.meng.utils.FileUtils.getExternalFileDir;
 import static com.example.zuo81.meng.utils.FileUtils.writeInputStreamToDisk;
-import static com.example.zuo81.meng.utils.SystemUtil.isWifiConnected;
+import static com.example.zuo81.meng.utils.NetworkUtils.checkNetworkConnect;
+import static com.example.zuo81.meng.utils.NetworkUtils.getAPNType;
 import static java.lang.Thread.sleep;
 
 
@@ -49,6 +51,7 @@ public class SplashActivity extends MVPBaseActivity<SplashPresenterImp> implemen
     TextView tvWelcomeAuthor;
 
     private PlayServiceConnection mPlayServiceConnection;
+    private Handler handler = new Handler();
 
     @Override
     public int getLayoutId() {
@@ -62,13 +65,35 @@ public class SplashActivity extends MVPBaseActivity<SplashPresenterImp> implemen
 
     @Override
     public void initEventAndData() {
-        //hide virtual button
+        if (MusicUtils.getPlayService() == null) {
+            startService();
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                bindService();
+            }
+        }, 3000);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         Logger.addLogAdapter(new AndroidLogAdapter());
         getExternalFileDir(SPLASH_PIC_DIRECTORY_NAME);
-        if (isWifiConnected()) {
-            SplashActivityPermissionsDispatcher.needsPermissionWithCheck(this);
+        if(checkNetworkConnect(this)) {
+            switch(getAPNType(this)) {
+                case "WIFI":
+                    Logger.d("wifi");
+                    SplashActivityPermissionsDispatcher.needsPermissionWithCheck(this);
+                    break;
+                case "4G":
+                case "3G":
+                case "2G":
+                    Logger.d("4g");
+                    break;
+                default:
+                    Logger.d("unknown");
+                    break;
+            }
         } else {
+            Logger.d("no internet");
             showPic();
         }
     }
@@ -78,20 +103,12 @@ public class SplashActivity extends MVPBaseActivity<SplashPresenterImp> implemen
     public void showPic() {
         // 尝试用bitmapcache缓存bitmap加载， 失败..不能这么做的原因是每次冷启动时都无法加载图片
         ivWelcomeBg.setImageBitmap(BitmapCache.getInstance().decodeSampledBitmapFromResource(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH, 100, 100));
-        if (MusicUtils.getPlayService() == null) {
-            startService();
-            bindService();
-        } else {
-            jumpToMain();
-        }
     }
 
     @Override
     public void savePic(ResponseBody body) {
         Logger.d("savepic");
         writeInputStreamToDisk(body.byteStream(), APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH);
-        //BitmapCache.getInstance().saveBitmapCacheFromFile(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH);
-        jumpToMain();
     }
 
     @Override

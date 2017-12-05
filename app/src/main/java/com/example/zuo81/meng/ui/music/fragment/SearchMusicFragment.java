@@ -13,6 +13,7 @@ import com.example.zuo81.meng.base.contract.music.SearchMusic;
 import com.example.zuo81.meng.model.bean.music.BaiDuMusicSearchBean;
 import com.example.zuo81.meng.presenter.music.SearchMusicPresenter;
 import com.example.zuo81.meng.ui.music.adapter.OnlineMusicListAdapter;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
 
     @Override
     public void showContent(List<BaiDuMusicSearchBean> baiDuBeanList) {
+        Logger.d("showContent");
         list.clear();
         list.addAll(baiDuBeanList);
         adapter.notifyDataSetChanged();

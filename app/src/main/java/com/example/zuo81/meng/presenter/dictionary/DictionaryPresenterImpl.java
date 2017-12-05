@@ -24,22 +24,17 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.subscribers.ResourceSubscriber;
 
-import static com.example.zuo81.meng.model.http.api.ShanBeiApis.Host;
 
 /**
  * Created by zuo81 on 2017/10/26.
  */
 
 public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> implements Dictionary.Presenter {
-    @Inject
-    DataManager mDataManager;
+    private DataManager mDataManager;
 
-    /*@Inject
+    @Inject
     public DictionaryPresenterImpl(DataManager mDataManager) {
         this.mDataManager = mDataManager;
-    }*/
-    @Inject
-    public DictionaryPresenterImpl() {
     }
 
     @Override
@@ -88,7 +83,7 @@ public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> im
     }
 
     @Override
-    public void addToRealmDictionary(String english, String chinese) {
+    public RealmDictionaryBean addToRealmDictionary(String english, String chinese) {
         Logger.d("addToRealmDictionary");
         RealmDictionaryBean bean = new RealmDictionaryBean();
         Long tempmID = UUID.randomUUID().getLeastSignificantBits();
@@ -96,6 +91,7 @@ public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> im
         bean.setEnglish(english);
         bean.setChinese(chinese);
         mDataManager.insertDictionaryBean(bean);
+        return bean;
     }
 
     public void deleteDictionaryData(long id) {
@@ -122,7 +118,7 @@ public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> im
                     @Override
                     public void onNext(ShanBeiBean shanBeiBean) {
                         Logger.d(shanBeiBean.getData().getDefinition());
-                        view.updateList(shanBeiBean);
+                        view.addItem(shanBeiBean);
                     }
                 }));
     }

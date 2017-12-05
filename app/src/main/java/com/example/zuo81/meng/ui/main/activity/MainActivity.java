@@ -52,6 +52,8 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
     private int showFragment;
     private int CURRENT_ITEM_LAYOUT_ID;
     private Class firstLoadClass;
+    private MusicMainFragment mMusicMainFragment;
+    private SearchView searchView;
 
     @Override
     public void initInject() {
@@ -89,7 +91,10 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
                 CURRENT_ITEM_LAYOUT_ID = R.id.nav_music;
                 firstLoadClass = MusicMainFragment.class;
                 showFragment = Constants.SEARCH_TYPE_MAIN_MUSIC;
-            return MusicMainFragment.newInstance();
+                if(mMusicMainFragment == null) {
+                    mMusicMainFragment = MusicMainFragment.newInstance();
+                }
+            return mMusicMainFragment;
             case GALLERY_FRAGMENT:
                 CURRENT_ITEM_LAYOUT_ID = R.id.nav_gallery;
                 firstLoadClass = GalleryFragment.class;
@@ -121,7 +126,7 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView)item.getActionView();
+        searchView = (SearchView)item.getActionView();
         if (showFragment == SEARCH_TYPE_DICTIONARY) {
             searchView.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         } else if(showFragment == Constants.SEARCH_TYPE_MAIN_MUSIC) {
@@ -139,8 +144,7 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
                     RXBus.getInstance().post(new SearchEvent(query, SEARCH_TYPE_DICTIONARY));
                 } else if(showFragment == Constants.SEARCH_TYPE_MAIN_MUSIC) {
                     Logger.d("onQueryTextSubmit");
-                    MusicMainFragment fragment = MusicMainFragment.newInstance();
-                    fragment.doSearch(query);
+                    mMusicMainFragment.doSearch(query);
                 }
                 return false;
             }
@@ -157,6 +161,7 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
         int id = item.getItemId();
         if(id == R.id.nav_dictionary) {
             showFragment = SEARCH_TYPE_DICTIONARY;
+            searchView.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
             DictionaryFragment fragment = findFragment(DictionaryFragment.class);
             if (fragment == null) {
                 popTo(firstLoadClass, false, new Runnable() {
