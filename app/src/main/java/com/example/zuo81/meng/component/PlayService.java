@@ -27,6 +27,13 @@ import com.example.zuo81.meng.utils.BitmapCache;
 import com.example.zuo81.meng.utils.MusicUtils;
 import com.example.zuo81.meng.utils.SPUtils;
 import com.orhanobut.logger.Logger;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCancellationSignal;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
+import com.qiniu.android.storage.UploadOptions;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,6 +45,8 @@ import static com.example.zuo81.meng.app.App.getBiliShare;
 import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
 import static com.example.zuo81.meng.app.Constants.SPLASH;
 import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
+import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
+import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
 
 public class PlayService extends Service implements MediaPlayer.OnCompletionListener {
     private static boolean isPlaying;
@@ -162,7 +171,32 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         }
     }
 
-    private void updateMusicToQiniu(){}
+    private void updateMusicToQiniu(){
+        File musicFile = new File();
+        String key = "";
+        getUploadManagerInstance().put(musicFile, key, getUpToken(key),
+                new UpCompletionHandler() {
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject response) {
+                            Logger.d("complete");
+                        }
+                },
+                new UploadOptions(null, null, false,
+                        new UpProgressHandler() {
+                            @Override
+                            public void progress(String key, double percent) {
+                                Logger.d("progress");
+                            }
+                        },
+                        new UpCancellationSignal() {
+                            @Override
+                            public boolean isCancelled() {
+                                return false;
+                            }
+                        }
+                )
+        );
+    }
 
     private void shareToWX(Activity activity, LocalMusicBean bean) {
         BaseShareParam param = new ShareParamAudio(bean.getTitle(), bean.getArtist(), "http://www.bilibili.com/video/av3521416");

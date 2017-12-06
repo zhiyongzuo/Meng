@@ -14,7 +14,7 @@ public interface SearchMusic {
 
     interface View extends BaseView {
 
-        void showContent(List<BaiDuMusicSearchBean> baiDuBeanList);
+        void showContent(List<BaiDuMusicSearchBean.SongListBean> baiDuBeanList);
 
         void showProcess();
 

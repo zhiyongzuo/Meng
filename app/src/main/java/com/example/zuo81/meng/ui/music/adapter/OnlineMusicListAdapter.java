@@ -25,7 +25,7 @@ import static com.example.zuo81.meng.app.Constants.SEARCH_TYPE_PLAY_MUSIC;
 
 public class OnlineMusicListAdapter extends RecyclerView.Adapter<OnlineMusicListAdapter.SearchViewHolder> {
     private Context context;
-    private List<BaiDuMusicSearchBean> mList;
+    private List<BaiDuMusicSearchBean.SongListBean> mList;
     private OnDetailClickListener listener;
     public interface OnDetailClickListener {
         void click();
@@ -34,7 +34,7 @@ public class OnlineMusicListAdapter extends RecyclerView.Adapter<OnlineMusicList
            this.listener = listener;
     }
 
-    public OnlineMusicListAdapter(Context context, List<BaiDuMusicSearchBean> list) {
+    public OnlineMusicListAdapter(Context context, List<BaiDuMusicSearchBean.SongListBean> list) {
         this.context = context;
         mList = list;
     }
@@ -47,20 +47,20 @@ public class OnlineMusicListAdapter extends RecyclerView.Adapter<OnlineMusicList
 
     @Override
     public void onBindViewHolder(SearchViewHolder holder, int position) {
-        final BaiDuMusicSearchBean.SongBean songListBean = mList.get(position).getSong().get(0);
-        holder.tvSongName.setText(songListBean.getSongname());
-        holder.tvAuthorAlbum.setText(songListBean.getArtistname() + " - " + mList.get(position).getAlbum().get(0).getAlbumname());
+        final BaiDuMusicSearchBean.SongListBean songListBean = mList.get(position);
+        holder.tvSongName.setText(songListBean.getTitle());
+        holder.tvAuthorAlbum.setText(songListBean.getAuthor() + " - " + mList.get(position).getAlbum_title());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RXBus.getInstance().post(new SearchEvent(songListBean.getSongid(), SEARCH_TYPE_PLAY_MUSIC));
+                RXBus.getInstance().post(new SearchEvent(songListBean.getSong_id(), SEARCH_TYPE_PLAY_MUSIC));
             }
         });
         holder.iv_detail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(context)
-                        .setTitle(songListBean.getSongname())
+                        .setTitle(songListBean.getTitle())
                         .setItems(R.array.search_music_dialog, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

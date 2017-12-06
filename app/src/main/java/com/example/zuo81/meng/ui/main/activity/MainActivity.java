@@ -80,7 +80,6 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
-        //navigationView.getMenu().findItem(CURRENT_ITEM_LAYOUT_ID).setChecked(true);
         navigationView.setCheckedItem(CURRENT_ITEM_LAYOUT_ID);
     }
 

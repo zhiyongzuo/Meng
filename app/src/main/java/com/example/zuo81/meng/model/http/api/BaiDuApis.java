@@ -21,13 +21,13 @@ public interface BaiDuApis {
 
 
     String Host = "http://tingapi.ting.baidu.com/v1/restserver/";
-    //String Method_search = "baidu.ting.search.catalogSug";
-    String Method_search = "baidu.ting.search.common";
+    String Method_search = "baidu.ting.search.catalogSug";
+    //String Method_search = "baidu.ting.search.common";
     String Method_lrc="";
     String Method_play = "baidu.ting.song.play";
 
     @GET("ting")
-    Flowable<List<BaiDuMusicSearchBean>> fetchMusicListInfo(@Query("method") String method, @Query("query") String query);
+    Flowable<BaiDuMusicSearchBean> fetchMusicListInfo(@Query("method") String method, @Query("query") String query);
 
     @GET("ting")
     Flowable<BaiDuPlayBean> playMusicLink(@Query("method") String method, @Query("songid") String songId);

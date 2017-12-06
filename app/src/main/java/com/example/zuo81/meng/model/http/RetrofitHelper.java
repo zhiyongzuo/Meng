@@ -52,7 +52,7 @@ public class RetrofitHelper implements HttpHelper {
         return mShanBeiApis.getDictionaryInfo(s);
     }
 
-    public Flowable<List<BaiDuMusicSearchBean>> searchMusicListInfo(String s) {
+    public Flowable<BaiDuMusicSearchBean> searchMusicListInfo(String s) {
         return mBaiDuApis.fetchMusicListInfo(Method_search, s);
     }
 

@@ -63,7 +63,7 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
 
 
     //SearchMusic
-    public Flowable<List<BaiDuMusicSearchBean>> searchMusicListInfo(String s) {
+    public Flowable<BaiDuMusicSearchBean> searchMusicListInfo(String s) {
         return mHttpHelper.searchMusicListInfo(s);
     }
 

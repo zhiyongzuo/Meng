@@ -17,7 +17,7 @@ public interface HttpHelper {
 
     Flowable<ShanBeiBean> fetchShanBeiSearchInfo(String s);
 
-    Flowable<List<BaiDuMusicSearchBean>> searchMusicListInfo(String s);
+    Flowable<BaiDuMusicSearchBean> searchMusicListInfo(String s);
 
     Flowable<WelcomeBean> fetchWelcomePicBean();
 

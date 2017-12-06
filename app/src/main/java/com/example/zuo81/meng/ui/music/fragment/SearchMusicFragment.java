@@ -28,7 +28,7 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
     RecyclerView rvSearchMusic;
 
     private OnlineMusicListAdapter adapter;
-    private List<BaiDuMusicSearchBean> list = new ArrayList<>() ;
+    private List<BaiDuMusicSearchBean.SongListBean> list = new ArrayList<>() ;
 
     @Override
     protected int getLayoutId() {
@@ -54,7 +54,7 @@ public class SearchMusicFragment extends MVPBaseFragment<SearchMusicPresenter> i
     }
 
     @Override
-    public void showContent(List<BaiDuMusicSearchBean> baiDuBeanList) {
+    public void showContent(List<BaiDuMusicSearchBean.SongListBean> baiDuBeanList) {
         Logger.d("showContent");
         list.clear();
         list.addAll(baiDuBeanList);

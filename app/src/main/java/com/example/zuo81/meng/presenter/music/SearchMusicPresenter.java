@@ -78,11 +78,22 @@ public class SearchMusicPresenter extends RxBasePresenter<SearchMusic.View> impl
         addToCompositeDisposable(mDataManager.searchMusicListInfo(s)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<BaiDuMusicSearchBean>>() {
+                .subscribeWith(new ResourceSubscriber<BaiDuMusicSearchBean>() {
                     @Override
-                    public void accept(List<BaiDuMusicSearchBean> baiDuBeanList) throws Exception {
+                    public void onNext(BaiDuMusicSearchBean baiDuBeanList) {
                         Logger.d("test");
-                        view.showContent(baiDuBeanList);
+                        view.showContent(baiDuBeanList.getSong_list());
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        Logger.d("onError" + t.getMessage());
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Logger.d("oncomplete");
                     }
                 }));
     }
