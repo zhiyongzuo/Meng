@@ -131,4 +131,10 @@ public class MainPresenter extends RxBasePresenter<MainContract.View> implements
                 }*/
             view.toastSuccess("restore success");
     }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+        mDataManager.closeRealm();
+    }
 }

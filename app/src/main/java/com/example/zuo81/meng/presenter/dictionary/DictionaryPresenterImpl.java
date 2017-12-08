@@ -30,12 +30,19 @@ import io.reactivex.subscribers.ResourceSubscriber;
  */
 
 public class DictionaryPresenterImpl extends RxBasePresenter<Dictionary.View> implements Dictionary.Presenter {
-    private DataManager mDataManager;
+    @Inject
+    DataManager mDataManager;
 
     @Inject
+    public DictionaryPresenterImpl() {
+    }
+
+    //private DataManager mDataManager;
+
+    /*@Inject
     public DictionaryPresenterImpl(DataManager mDataManager) {
         this.mDataManager = mDataManager;
-    }
+    }*/
 
     @Override
     public void attachView(Dictionary.View view) {

@@ -70,7 +70,7 @@ public class SharePresenter extends RxBasePresenter<Share.View> implements Share
 
     public void uploadToQinyun(String path) {
         File picFile = new File(path);
-        i = mDataManager.getSPId() + 1;
+        i = mDataManager.getPicDBSizeForId() + 1;
         key = "alwaysblue" + i + ".png";
         getUploadManagerInstance().put(picFile, key, getUpToken(key)
                 , new UpCompletionHandler() {
@@ -97,5 +97,11 @@ public class SharePresenter extends RxBasePresenter<Share.View> implements Share
                 }
                 )
         );
+    }
+
+    @Override
+    public void detachView() {
+        super.detachView();
+        mDataManager.closeRealm();
     }
 }

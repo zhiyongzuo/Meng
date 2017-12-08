@@ -21,7 +21,9 @@ import com.bilibili.socialize.share.core.shareparam.ShareImage;
 import com.bilibili.socialize.share.core.shareparam.ShareParamAudio;
 import com.example.zuo81.meng.app.App;
 import com.example.zuo81.meng.app.Constants;
+import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
+import com.example.zuo81.meng.model.bean.realm.RealmQNMusicBean;
 import com.example.zuo81.meng.service.OnPlayerEventListener;
 import com.example.zuo81.meng.utils.BitmapCache;
 import com.example.zuo81.meng.utils.MusicUtils;
@@ -41,10 +43,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static com.example.zuo81.meng.app.App.getBiliShare;
 import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
 import static com.example.zuo81.meng.app.Constants.SPLASH;
 import static com.example.zuo81.meng.app.Constants.SPLASH_PIC_DIRECTORY_NAME;
+import static com.example.zuo81.meng.app.Constants.TEST_DOMAIN;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
 import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
 
@@ -57,9 +62,10 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private OnPlayerEventListener listener;
     private MediaPlayer mPlayer = new MediaPlayer();
     private Handler handler = new Handler();
+    private String key;
     //inject DataManager Error nullPointException  但是在dictionarypresenter中注入，正常运行。。。
-    /*@Inject
-    DataManager mDataManager;*/
+    DataManager mDataManager;
+
     public PlayService() {
     }
 
@@ -71,6 +77,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     @Override
     public void onCreate() {
         super.onCreate();
+        mDataManager = App.getAppComponent().getDataManager();
         mPlayer.setOnCompletionListener(this);
     }
 
@@ -163,29 +170,52 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         Logger.d(id);
         LocalMusicBean bean = MusicUtils.queryFromId(id);
         if (bean!=null) {
-            //todo qiniu
-            updateMusicToQiniu();
+            String path = bean.getPath();
+            String suffix = path.substring(path.lastIndexOf("."), path.length());
+            key = bean.getTitle() + suffix;
+            Logger.d(key);
+            if (!mDataManager.isMusicAlreadyUploadToQN(bean.getTitle())) {
+                updateMusicToQiniu(bean);
+            }
             shareToWX(activity, bean);
         } else {
             Logger.d("null");
         }
     }
 
-    private void updateMusicToQiniu(){
-        File musicFile = new File();
-        String key = "";
-        getUploadManagerInstance().put(musicFile, key, getUpToken(key),
+    private void insertIntoMusicDB(LocalMusicBean bean) {
+        Logger.d("insertIntoMusicDB");
+        RealmQNMusicBean mRealmMusicBean = new RealmQNMusicBean();
+        long id = mDataManager.getMusicDBSizeForId();
+        mRealmMusicBean.setId(id);
+        mRealmMusicBean.setMusicName(bean.getTitle());
+        mRealmMusicBean.setMusicPath(TEST_DOMAIN + key);
+        mRealmMusicBean.setArtistName(bean.getArtist());
+        mDataManager.insertMusicBean(mRealmMusicBean);
+        Logger.d(TEST_DOMAIN + key);
+    }
+
+    //musicUrl : http://qiniu.iwhere.com/track/backgroundMusic/backgroundmusic1.mp3
+    ///storage/emulated/0/netease/cloudmusic/Music/赵雷 - 成都.mp3
+    //http://7xu8tp.com1.z0.glb.clouddn.com/alwaysblue79.png
+    private void updateMusicToQiniu(final LocalMusicBean bean){
+        getUploadManagerInstance().put(bean.getPath(), key, getUpToken(key),
                 new UpCompletionHandler() {
                         @Override
                         public void complete(String key, ResponseInfo info, JSONObject response) {
                             Logger.d("complete");
+                            if (info.isOK()) {
+                                insertIntoMusicDB(bean);
+                            } else {
+                                Logger.d("failed");
+                            }
                         }
                 },
                 new UploadOptions(null, null, false,
                         new UpProgressHandler() {
                             @Override
                             public void progress(String key, double percent) {
-                                Logger.d("progress");
+                                //Logger.d("progress");
                             }
                         },
                         new UpCancellationSignal() {
@@ -199,9 +229,13 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     }
 
     private void shareToWX(Activity activity, LocalMusicBean bean) {
-        BaseShareParam param = new ShareParamAudio(bean.getTitle(), bean.getArtist(), "http://www.bilibili.com/video/av3521416");
+        Logger.d(TEST_DOMAIN + key);
+        BaseShareParam param = new ShareParamAudio(bean.getTitle(), bean.getArtist(), TEST_DOMAIN + key);
         ShareParamAudio paramAudio = (ShareParamAudio)param;
-        ShareAudio audio = new ShareAudio(new ShareImage("http://i2.hdslb.com/320_200/video/85/85ae2b17b223a0cd649a49c38c32dd10.jpg"), "http://www.bilibili.com/video/av3521416", "哔哩哔哩2016拜年祭");
+        //ShareAudio audio = new ShareAudio(new ShareImage("http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN"), TEST_DOMAIN + key, "哔哩哔哩2016拜年祭");
+        ShareAudio audio = new ShareAudio(new ShareImage(BitmapCache.getInstance().decodeSampledBitmapFromResource(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH, 100, 100)),
+                TEST_DOMAIN + key,
+                "哔哩哔哩2016拜年祭");
         paramAudio.setAudio(audio);
         getBiliShare().share(activity, SocializeMedia.WEIXIN_MONMENT, paramAudio, shareListener);
     }
@@ -231,7 +265,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            Logger.d((int)MusicUtils.getPlayService().getCurrentPosition());
+//            Logger.d((int)MusicUtils.getPlayService().getCurrentPosition());
             listener.showSeekBarProgress((int)MusicUtils.getPlayService().getCurrentPosition());
             handler.postDelayed(this, 300);
         }

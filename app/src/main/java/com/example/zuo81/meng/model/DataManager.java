@@ -4,6 +4,7 @@ import com.example.zuo81.meng.model.bean.WelcomeBean;
 import com.example.zuo81.meng.model.bean.music.BaiDuMusicSearchBean;
 import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
+import com.example.zuo81.meng.model.bean.realm.RealmQNMusicBean;
 import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.model.db.DBHelper;
 import com.example.zuo81.meng.model.http.HttpHelper;
@@ -29,6 +30,14 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
         this.dbHelper = dbHelper;
         this.prefsHelper = prefsHelper;
     }
+
+    //close realm
+
+    @Override
+    public void closeRealm() {
+        dbHelper.closeRealm();
+    }
+
 
     //Welcome Pic
 
@@ -67,9 +76,12 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
         return mHttpHelper.searchMusicListInfo(s);
     }
 
+    @Override
+    public boolean isMusicAlreadyUploadToQN(String name) {
+        return dbHelper.isMusicAlreadyUploadToQN(name);
+    }
 
-
-/*       Dictionary           */
+    /*       Dictionary           */
     @Override
     public List<RealmDictionaryBean> getAllRealmDictionaryList() {
         return dbHelper.getAllRealmDictionaryList();
@@ -104,13 +116,25 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
     }
 
     @Override
-    public long getSPId() {
-        return dbHelper.getSPId();
+    public long getPicDBSizeForId() {
+        return dbHelper.getPicDBSizeForId();
     }
 
 
+//music
+
+    @Override
+    public long getMusicDBSizeForId() {
+        return dbHelper.getMusicDBSizeForId();
+    }
+
+    @Override
+    public void insertMusicBean(RealmQNMusicBean bean) {
+        dbHelper.insertMusicBean(bean);
+    }
 
     //      SP
+
     @Override
     public void setSPNumber(int pageNumber) {
         prefsHelper.setSPNumber(pageNumber);

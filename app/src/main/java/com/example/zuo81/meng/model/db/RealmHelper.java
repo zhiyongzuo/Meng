@@ -2,16 +2,22 @@ package com.example.zuo81.meng.model.db;
 
 import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.realm.RealmPhotoBean;
+import com.example.zuo81.meng.model.bean.realm.RealmQNMusicBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
+import io.realm.RealmObjectSchema;
 import io.realm.RealmResults;
+import io.realm.RealmSchema;
 
+import static com.example.zuo81.meng.app.Constants.KEY_REALM_DB_NAME;
 import static com.example.zuo81.meng.app.Constants.SHAREDPREFERENCES_PIC_NUMBER_KEY;
 
 /**
@@ -25,6 +31,11 @@ public class RealmHelper implements DBHelper {
     @Inject
     public RealmHelper() {
         mRealm = Realm.getDefaultInstance();
+        /*mRealm = Realm.getInstance(new RealmConfiguration.Builder()
+                //.deleteRealmIfMigrationNeeded()
+                .migration(new CustomMigration())
+                .name(KEY_REALM_DB_NAME)
+                .build());*/
     }
 
     //增加字典词汇
@@ -55,7 +66,28 @@ public class RealmHelper implements DBHelper {
     }
 
 
+    //music
+    @Override
+    public long getMusicDBSizeForId() {
+        RealmResults<RealmQNMusicBean> results = mRealm.where(RealmQNMusicBean.class).findAll();
+        return results.size();
+    }
 
+    @Override
+    public void insertMusicBean(RealmQNMusicBean bean) {
+        mRealm.beginTransaction();
+        mRealm.copyToRealmOrUpdate(bean);
+        mRealm.commitTransaction();
+    }
+
+    @Override
+    public boolean isMusicAlreadyUploadToQN(String name) {
+        List<RealmQNMusicBean> bean = mRealm.where(RealmQNMusicBean.class).equalTo("mMusicName", name).findAll();
+        if(bean.size()>0) {
+            return true;
+        }
+        return false;
+    }
 
     //      Photo
     public void insertPhotoBean(RealmPhotoBean bean) {
@@ -93,14 +125,14 @@ public class RealmHelper implements DBHelper {
     }
 
     @Override
-    public long getSPId() {
+    public long getPicDBSizeForId() {
         RealmResults<RealmPhotoBean> results = mRealm.where(RealmPhotoBean.class).findAll();
         return results.size();
     }
 
 
 
-    public void close() {
+    public void closeRealm() {
         if (!mRealm.isClosed()) {
             mRealm.close();
         }
