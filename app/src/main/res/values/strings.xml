@@ -35,4 +35,9 @@
     <string name="title_activity_no_mvpbase">NoMVPBaseActivity</string>
     <string name="Meng">Meng</string>
     <string name="load_first">load first</string>
+
+    <array name="items_content">
+        <item>delete</item>
+        <item>save</item>
+    </array>
 </resources>

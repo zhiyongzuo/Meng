@@ -80,7 +80,6 @@ public class SplashActivity extends MVPBaseActivity<SplashPresenterImp> implemen
         if(checkNetworkConnect(this)) {
             switch(getAPNType(this)) {
                 case "WIFI":
-                    Logger.d("wifi");
                     SplashActivityPermissionsDispatcher.needsPermissionWithCheck(this);
                     break;
                 case "4G":

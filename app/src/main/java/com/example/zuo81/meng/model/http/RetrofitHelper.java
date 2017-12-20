@@ -8,7 +8,15 @@ import com.example.zuo81.meng.model.http.api.BaiDuApis;
 import com.example.zuo81.meng.model.http.api.ShanBeiApis;
 import com.example.zuo81.meng.model.http.api.SplashApis;
 import com.orhanobut.logger.Logger;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCancellationSignal;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UpProgressHandler;
+import com.qiniu.android.storage.UploadOptions;
 
+import org.json.JSONObject;
+
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +26,8 @@ import okhttp3.ResponseBody;
 
 import static com.example.zuo81.meng.model.http.api.BaiDuApis.Method_play;
 import static com.example.zuo81.meng.model.http.api.BaiDuApis.Method_search;
+import static com.example.zuo81.meng.utils.QiniuUtil.getUpToken;
+import static com.example.zuo81.meng.utils.QiniuUtil.getUploadManagerInstance;
 
 /**
  * Created by zuo81 on 2017/10/31.

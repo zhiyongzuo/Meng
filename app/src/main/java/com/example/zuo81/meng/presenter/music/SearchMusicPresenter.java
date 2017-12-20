@@ -39,7 +39,6 @@ public class SearchMusicPresenter extends RxBasePresenter<SearchMusic.View> impl
     }
 
     public void registerEvent() {
-        Logger.d("search music register");
         addToCompositeDisposable(RXBus.getInstance().toFlowable(SearchEvent.class)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

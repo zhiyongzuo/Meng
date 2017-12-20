@@ -3,16 +3,12 @@ package com.example.zuo81.meng.component;
 import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
-import com.bilibili.socialize.share.core.BiliShare;
 import com.bilibili.socialize.share.core.SocializeListeners;
 import com.bilibili.socialize.share.core.SocializeMedia;
 import com.bilibili.socialize.share.core.shareparam.BaseShareParam;
@@ -20,7 +16,6 @@ import com.bilibili.socialize.share.core.shareparam.ShareAudio;
 import com.bilibili.socialize.share.core.shareparam.ShareImage;
 import com.bilibili.socialize.share.core.shareparam.ShareParamAudio;
 import com.example.zuo81.meng.app.App;
-import com.example.zuo81.meng.app.Constants;
 import com.example.zuo81.meng.model.DataManager;
 import com.example.zuo81.meng.model.bean.music.LocalMusicBean;
 import com.example.zuo81.meng.model.bean.realm.RealmQNMusicBean;
@@ -37,13 +32,10 @@ import com.qiniu.android.storage.UploadOptions;
 
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import static com.example.zuo81.meng.app.App.getBiliShare;
 import static com.example.zuo81.meng.app.Constants.APP_DIRECTORY;
@@ -173,9 +165,9 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             String path = bean.getPath();
             String suffix = path.substring(path.lastIndexOf("."), path.length());
             key = bean.getTitle() + suffix;
-            Logger.d(key);
             if (!mDataManager.isMusicAlreadyUploadToQN(bean.getTitle())) {
-                updateMusicToQiniu(bean);
+                insertMusicToQiniu(bean);
+                insertIntoMusicDB(bean);
             }
             shareToWX(activity, bean);
         } else {
@@ -198,14 +190,13 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     //musicUrl : http://qiniu.iwhere.com/track/backgroundMusic/backgroundmusic1.mp3
     ///storage/emulated/0/netease/cloudmusic/Music/赵雷 - 成都.mp3
     //http://7xu8tp.com1.z0.glb.clouddn.com/alwaysblue79.png
-    private void updateMusicToQiniu(final LocalMusicBean bean){
+    private void insertMusicToQiniu(final LocalMusicBean bean){
         getUploadManagerInstance().put(bean.getPath(), key, getUpToken(key),
                 new UpCompletionHandler() {
                         @Override
                         public void complete(String key, ResponseInfo info, JSONObject response) {
-                            Logger.d("complete");
                             if (info.isOK()) {
-                                insertIntoMusicDB(bean);
+                                Logger.d("complete");
                             } else {
                                 Logger.d("failed");
                             }
@@ -235,7 +226,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         //ShareAudio audio = new ShareAudio(new ShareImage("http://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN"), TEST_DOMAIN + key, "哔哩哔哩2016拜年祭");
         ShareAudio audio = new ShareAudio(new ShareImage(BitmapCache.getInstance().decodeSampledBitmapFromResource(APP_DIRECTORY + SPLASH_PIC_DIRECTORY_NAME, SPLASH, 100, 100)),
                 TEST_DOMAIN + key,
-                "哔哩哔哩2016拜年祭");
+                "祭");
         paramAudio.setAudio(audio);
         getBiliShare().share(activity, SocializeMedia.WEIXIN_MONMENT, paramAudio, shareListener);
     }

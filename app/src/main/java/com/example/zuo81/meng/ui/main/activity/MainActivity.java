@@ -1,5 +1,6 @@
 package com.example.zuo81.meng.ui.main.activity;
 
+import android.content.Context;
 import android.support.v7.widget.SearchView;
 import android.text.InputType;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.example.zuo81.meng.R;
@@ -93,7 +95,7 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
                 if(mMusicMainFragment == null) {
                     mMusicMainFragment = MusicMainFragment.newInstance();
                 }
-            return mMusicMainFragment;
+                return mMusicMainFragment;
             case GALLERY_FRAGMENT:
                 CURRENT_ITEM_LAYOUT_ID = R.id.nav_gallery;
                 firstLoadClass = GalleryFragment.class;
@@ -220,6 +222,12 @@ public class MainActivity extends MVPBaseActivity<MainPresenter>
             presenter.restoreRealmDB();
         }
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        searchView.clearFocus();
     }
 
     @Override

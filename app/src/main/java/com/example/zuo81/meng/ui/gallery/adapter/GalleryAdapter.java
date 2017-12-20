@@ -1,6 +1,7 @@
 package com.example.zuo81.meng.ui.gallery.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     private Context context;
     private List<RealmPhotoBean> list;
     private OnItemClickListener listener;
+    private LayoutInflater inflater;
 
     public interface OnItemClickListener {
         void onClick(int position, List<RealmPhotoBean> list);
+        void onLongClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -34,22 +37,31 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public GalleryAdapter(Context context, List<RealmPhotoBean> list) {
         this.context = context;
         this.list = list;
+        this.inflater = LayoutInflater.from(context);
     }
 
     @Override
     public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_gallery_adapter, parent, false);
-        return new GalleryViewHolder(view);
+        return new GalleryViewHolder(inflater.inflate(R.layout.item_gallery_adapter, parent, false));
     }
 
     @Override
     public void onBindViewHolder(GalleryViewHolder holder, final int position) {
-        //Glide.with(context).load(list.get(position).getPhotoUrl()).into(holder.iv);
-        GlideApp.with(context).load(list.get(position).getPhotoUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv);
+        GlideApp.with(context).load(list.get(position).getPhotoUrl() + "?" + System.currentTimeMillis()).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(R.drawable.test)
+                .placeholder(R.drawable.killer)
+                .into(holder.iv);
         holder.iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.onClick(position, list);
+            }
+        });
+        holder.iv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                listener.onLongClick(position);
+                return false;
             }
         });
     }

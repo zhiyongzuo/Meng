@@ -12,12 +12,14 @@ public interface Share {
     interface View extends BaseView {
         void showProgress(int i);
 
-        void hideProgress(long number);
+        void hideProgress();
+
+        void uploadSuccess(long number);
     }
 
     interface Presenter extends BasePresenter<View> {
-        void inserIntoPicUrlDB();
 
-        void uploadToQinyun(String path);
+        void backupPic(String path);
+
     }
 }

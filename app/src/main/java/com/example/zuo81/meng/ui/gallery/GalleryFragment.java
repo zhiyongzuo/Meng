@@ -1,16 +1,16 @@
 package com.example.zuo81.meng.ui.gallery;
 
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.zuo81.meng.R;
@@ -22,6 +22,7 @@ import com.example.zuo81.meng.ui.gallery.activity.DetailGalleryPicActivity;
 import com.example.zuo81.meng.ui.gallery.adapter.GalleryAdapter;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,8 +44,9 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
     SwipeRefreshLayout swipeRefreshLayout;
 
     private GalleryAdapter adapter;
-    private List<RealmPhotoBean> list;
+    private List<RealmPhotoBean> mList;
     private boolean isLoadingMore = false;
+    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
 
     public static GalleryFragment newInstance() {
         return new GalleryFragment();
@@ -63,34 +65,43 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
     @Override
     protected void initEventAndData() {
         fab.setOnClickListener(this);
+        mList = new ArrayList<>();
         swipeRefreshLayout.setOnRefreshListener(this);
-        final StaggeredGridLayoutManager mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        //mStaggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-        //fix issue #52 https://github.com/codeestX/GeekNews/issues/52
-        //mStaggeredGridLayoutManager.setItemPrefetchEnabled(false);
+        mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        mStaggeredGridLayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        mStaggeredGridLayoutManager.setItemPrefetchEnabled(false);
 
         rvGallery.setLayoutManager(mStaggeredGridLayoutManager);
-        list = presenter.getData();
-        adapter = new GalleryAdapter(getContext(), list);
+        adapter = new GalleryAdapter(getContext(), mList);
         adapter.setOnItemClickListener(this);
         rvGallery.setAdapter(adapter);
         rvGallery.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int[] i = mStaggeredGridLayoutManager.findLastVisibleItemPositions(null);
-                int lastItemPosition = Math.max(i[0], i[1]);
-                if(lastItemPosition > adapter.getItemCount()-2 && !isLoadingMore && dy>0) {
+                int visibleCount = mStaggeredGridLayoutManager.getChildCount();
+                int totalCount = mStaggeredGridLayoutManager.getItemCount();
+                int[] firstCounts = mStaggeredGridLayoutManager.findFirstVisibleItemPositions(null);
+                int firstCount = Math.max(firstCounts[0], firstCounts[1]);
+                if(firstCount + visibleCount >= totalCount && !isLoadingMore) {
                     isLoadingMore = true;
                     presenter.loadMoreData();
                 }
             }
         });
+        presenter.getData();
     }
 
     @Override
     public void onRefresh() {
         presenter.refreshData();
+    }
+
+    @Override
+    public void showContent(List<RealmPhotoBean> list) {
+        mList.clear();
+        mList.addAll(list);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -102,8 +113,8 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
         if(swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }
-        list.clear();
-        list.addAll(mList);
+        this.mList.clear();
+        this.mList.addAll(mList);
         adapter.notifyDataSetChanged();
         Toast.makeText(getContext(), "refresh success", Toast.LENGTH_SHORT).show();
     }
@@ -112,7 +123,7 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
     public void loadMore(List<RealmPhotoBean> mList) {
         Toast.makeText(getContext(), "load more", Toast.LENGTH_SHORT).show();
         if (mList.size() >0) {
-            list.addAll(mList);
+            this.mList.addAll(mList);
             adapter.notifyDataSetChanged();
             isLoadingMore = false;
         } else {
@@ -128,8 +139,8 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
             isLoadingMore = false;
         }
         if (mList.size() > 0) {
-            list.clear();
-            list.addAll(mList);
+            this.mList.clear();
+            this.mList.addAll(mList);
             adapter.notifyDataSetChanged();
             Toast.makeText(getContext(), "jump success", Toast.LENGTH_SHORT).show();
         } else {
@@ -139,10 +150,32 @@ public class GalleryFragment extends MVPBaseFragment<GalleryPresenter> implement
 
     @Override
     public void onClick(int position, List<RealmPhotoBean> list) {
-//        start(DetailPicActivity.newInstance(position, list));
         Intent intent = new Intent(getActivity(), DetailGalleryPicActivity.class);
         intent.putExtra(EXTRA_NAME_DETAIL_PIC_ACTIVITY, list.get(position).getPhotoUrl());
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onLongClick(final int position) {
+        AlertDialog dialog = new AlertDialog.Builder(getContext())
+                .setItems(R.array.items_content, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch(which) {
+                            case 0:
+                                Logger.d(position);
+                                presenter.delete(mList.get(position));
+                                mList.remove(position);
+                                adapter.notifyDataSetChanged();//stay last
+                                break;
+                            case 1:
+                                Logger.d("save");
+                                break;
+                        }
+                    }
+                })
+                .create();
+        dialog.show();
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.example.zuo81.meng.di.module.AppModule;
 import com.example.zuo81.meng.di.module.HttpModule;
 import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
 import java.util.HashSet;
@@ -46,6 +47,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
 
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()

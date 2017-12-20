@@ -25,7 +25,7 @@ public class GalleryPresenter extends RxBasePresenter<Gallery.View> implements G
     }
 
     @Override
-    public List<RealmPhotoBean> getData() {
+    public void getData() {
         pageNumber = mDataManager.getSPNumber();
         Logger.d("getData" + pageNumber);
         if (pageNumber==1) {
@@ -38,7 +38,7 @@ public class GalleryPresenter extends RxBasePresenter<Gallery.View> implements G
         } else {
             list = mDataManager.getTwentyRealmPhotoList(pageNumber);
         }
-        return list;
+        view.showContent(list);
     }
 
     public void refreshData() {
@@ -78,5 +78,11 @@ public class GalleryPresenter extends RxBasePresenter<Gallery.View> implements G
             Logger.d("jump" + pageNumber);
         }
         view.jump(mDataManager.getTwentyRealmPhotoList(pageNumber));
+    }
+
+    @Override
+    public void delete(RealmPhotoBean bean) {
+        mDataManager.deletePhotoBean(bean);
+        //view.refresh();
     }
 }

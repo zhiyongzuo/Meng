@@ -90,14 +90,21 @@ public class RealmHelper implements DBHelper {
     }
 
     //      Photo
+    @Override
+    public boolean isIdExists(long id) {
+        RealmPhotoBean bean = mRealm.where(RealmPhotoBean.class).equalTo("id", id).findFirst();
+        return bean!=null;
+    }
+
     public void insertPhotoBean(RealmPhotoBean bean) {
         mRealm.beginTransaction();
         mRealm.copyToRealmOrUpdate(bean);
         mRealm.commitTransaction();
     }
 
-    public void deletePhotoBean(long id) {
-        RealmPhotoBean bean = mRealm.where(RealmPhotoBean.class).equalTo("id", id).findFirst();
+    @Override
+    public void deletePhotoBean(RealmPhotoBean mRealmPhotoBean) {
+        RealmPhotoBean bean = mRealm.where(RealmPhotoBean.class).equalTo("id", mRealmPhotoBean.getId()).findFirst();
         mRealm.beginTransaction();
         if(bean!=null) {
             bean.deleteFromRealm();

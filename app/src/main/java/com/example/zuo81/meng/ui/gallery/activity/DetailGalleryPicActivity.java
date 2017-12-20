@@ -32,7 +32,7 @@ public class DetailGalleryPicActivity extends NoMVPBaseActivity {
     @Override
     protected void initEventAndData() {
         String url = getIntent().getStringExtra(EXTRA_NAME_DETAIL_PIC_ACTIVITY);
-        GlideApp.with(this).load(url).into(photoView);
+        GlideApp.with(this).load(url + "?" + System.currentTimeMillis()).into(photoView);
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

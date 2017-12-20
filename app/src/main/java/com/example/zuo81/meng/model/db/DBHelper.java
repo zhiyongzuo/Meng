@@ -23,6 +23,10 @@ public interface DBHelper {
 
     long getPicDBSizeForId();
 
+    void deletePhotoBean(RealmPhotoBean bean);
+
+    boolean isIdExists(long id);
+
     /*
     *music
      */

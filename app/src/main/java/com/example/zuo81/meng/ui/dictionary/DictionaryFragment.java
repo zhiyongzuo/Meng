@@ -1,11 +1,13 @@
 package com.example.zuo81.meng.ui.dictionary;
 
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import com.example.zuo81.meng.model.bean.realm.RealmDictionaryBean;
 import com.example.zuo81.meng.model.bean.shanbei.ShanBeiBean;
 import com.example.zuo81.meng.presenter.dictionary.DictionaryPresenterImpl;
 import com.example.zuo81.meng.widget.DefaultItemTouchHelpCallback;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +83,7 @@ public class DictionaryFragment extends MVPBaseFragment<DictionaryPresenterImpl>
         mCallback.setSwipeEnable(true);
         ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(mCallback);
         mItemTouchHelper.attachToRecyclerView(rvDictionary);
+//        rvDictionary.addOnScrollListener();
     }
 
     private void init() {
@@ -107,5 +111,12 @@ public class DictionaryFragment extends MVPBaseFragment<DictionaryPresenterImpl>
     @Override
     public void showErrorMsg(String msg) {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
     }
 }

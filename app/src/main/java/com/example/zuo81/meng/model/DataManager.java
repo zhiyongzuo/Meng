@@ -10,6 +10,7 @@ import com.example.zuo81.meng.model.db.DBHelper;
 import com.example.zuo81.meng.model.http.HttpHelper;
 import com.example.zuo81.meng.model.prefs.PrefsHelper;
 
+import java.io.File;
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -70,17 +71,6 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
 
 
 
-
-    //SearchMusic
-    public Flowable<BaiDuMusicSearchBean> searchMusicListInfo(String s) {
-        return mHttpHelper.searchMusicListInfo(s);
-    }
-
-    @Override
-    public boolean isMusicAlreadyUploadToQN(String name) {
-        return dbHelper.isMusicAlreadyUploadToQN(name);
-    }
-
     /*       Dictionary           */
     @Override
     public List<RealmDictionaryBean> getAllRealmDictionaryList() {
@@ -120,8 +110,17 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
         return dbHelper.getPicDBSizeForId();
     }
 
+    @Override
+    public void deletePhotoBean(RealmPhotoBean bean) {
+        dbHelper.deletePhotoBean(bean);
+    }
 
-//music
+    @Override
+    public boolean isIdExists(long id) {
+        return dbHelper.isIdExists(id);
+    }
+
+    //music
 
     @Override
     public long getMusicDBSizeForId() {
@@ -131,6 +130,15 @@ public class DataManager implements HttpHelper, DBHelper, PrefsHelper {
     @Override
     public void insertMusicBean(RealmQNMusicBean bean) {
         dbHelper.insertMusicBean(bean);
+    }
+
+    public Flowable<BaiDuMusicSearchBean> searchMusicListInfo(String s) {
+        return mHttpHelper.searchMusicListInfo(s);
+    }
+
+    @Override
+    public boolean isMusicAlreadyUploadToQN(String name) {
+        return dbHelper.isMusicAlreadyUploadToQN(name);
     }
 
     //      SP

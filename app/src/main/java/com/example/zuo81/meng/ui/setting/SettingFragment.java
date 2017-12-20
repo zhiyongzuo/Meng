@@ -54,6 +54,7 @@ public class SettingFragment extends MVPBaseFragment<SettingPresenter> implement
                     public void onClick(DialogInterface dialogInterface, int i) {
                         switch(i) {
                             case DICTIONARY_FRAGMENT:
+                                SPUtils.setFirstLoadFragment(DICTIONARY_FRAGMENT);
                                 break;
                             case MUSIC_FRAGMENT:
                                 SPUtils.setFirstLoadFragment(MUSIC_FRAGMENT);

@@ -39,25 +39,7 @@ public class SharePicActivity extends MVPBaseActivity<SharePresenter> implements
             Uri uri = (Uri)intent.getExtras().getParcelable(EXTRA_STREAM);
             if (uri != null) {
                 Logger.d(uri.getPath());//  /storage/emulated/0/Android/data/com.null
-                presenter.uploadToQinyun(uri.getPath());
-                presenter.inserIntoPicUrlDB();
-            }
-
-            Bundle bundle = intent.getExtras();
-            switch(intent.getType()) {
-                case "text/plain":
-                    Logger.d(bundle.get(Intent.EXTRA_TITLE) + "   " + bundle.get(Intent.EXTRA_TEXT));
-                    String s = (String)bundle.get(Intent.EXTRA_TEXT);
-                    //tvShareUrl.setText(s);
-                    break;
-                case "image/*":
-                    //Toast.makeText(this, "pic success", Toast.LENGTH_SHORT).show();
-                    Logger.d("image/*");
-                    Uri u = (Uri)bundle.get(Intent.EXTRA_STREAM);
-                    Logger.d(u.getPath() + "   " + bundle.get(Intent.EXTRA_TEXT));
-                    break;
-                default:
-                    break;
+                presenter.backupPic(uri.getPath());
             }
         }
     }
@@ -67,9 +49,13 @@ public class SharePicActivity extends MVPBaseActivity<SharePresenter> implements
     }
 
     @Override
-    public void hideProgress(long number) {
-        Toast.makeText(this, number + " upload success", Toast.LENGTH_SHORT).show();
+    public void hideProgress() {
         numberProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void uploadSuccess(long number) {
+        Toast.makeText(this, number + " upload success", Toast.LENGTH_SHORT).show();
         finish();
     }
 

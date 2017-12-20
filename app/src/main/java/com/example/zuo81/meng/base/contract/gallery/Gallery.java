@@ -18,9 +18,14 @@ public interface Gallery {
         void refresh(List<RealmPhotoBean> list);
 
         void jump(List<RealmPhotoBean> list);
+
+        void showContent(List<RealmPhotoBean> list);
+
     }
 
     interface Presenter extends BasePresenter<View> {
-        List<RealmPhotoBean> getData();
+        void getData();
+
+        void delete(RealmPhotoBean bean);
     }
 }
